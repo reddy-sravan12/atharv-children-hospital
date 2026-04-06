@@ -111,15 +111,9 @@
   min-width: 200px;
 }
 
-@media (max-width: 760px) {
-  .mapContainer {
-    height: 380px;
-  }
-}
-
 @media (max-width: 600px) {
   .mapContainer {
-    height: 320px;
+    height: 360px;
   }
 
   .infoCard {
