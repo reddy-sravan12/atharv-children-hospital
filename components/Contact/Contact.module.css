@@ -1,0 +1,122 @@
+/* components/Contact/Contact.module.css */
+
+.section {
+  padding: 7rem 0;
+  background: var(--off-white);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.infoPanel {
+  background: linear-gradient(145deg, #0B5394 0%, #073B6F 100%);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.infoPanel::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(0, 180, 216, 0.12);
+}
+
+.infoPanel::after {
+  content: '';
+  position: absolute;
+  bottom: -40px;
+  left: -40px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.infoItems {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.infoItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+a.infoItem:hover {
+  opacity: 0.85;
+}
+
+.infoIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #90E0EF;
+  transition: background 0.2s ease;
+}
+
+a.infoItem:hover .infoIcon {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.emergencyBanner {
+  position: relative;
+  z-index: 1;
+  margin-top: 2.5rem;
+  padding: 1.25rem 1.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.formPanel {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .infoPanel {
+    padding: 2rem 1.5rem;
+  }
+
+  .infoItems {
+    gap: 1rem;
+  }
+
+  .emergencyBanner {
+    padding: 1rem 1.25rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .formPanel {
+    padding: 1.75rem 1.25rem;
+  }
+}

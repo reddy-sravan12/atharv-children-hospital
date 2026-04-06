@@ -1,0 +1,4 @@
+/* components/Header/Header.module.css */
+.appBar {
+  z-index: 1100 !important;
+}

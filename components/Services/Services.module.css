@@ -1,0 +1,115 @@
+/* components/Services/Services.module.css */
+
+.section {
+  padding: 7rem 0;
+  background: var(--off-white);
+  position: relative;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gray-200), transparent);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: var(--shadow-card);
+  border: 1px solid transparent;
+  transition: all var(--transition);
+  cursor: pointer;
+  opacity: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(26,115,200,0.03) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(26,115,200,0.15);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.iconBox {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--gray-50), var(--gray-100));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition);
+}
+
+.card:hover .iconBox {
+  background: linear-gradient(135deg, rgba(26,115,200,0.12), rgba(0,180,216,0.08));
+  transform: scale(1.08);
+}
+
+.emoji {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.learnMore {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--primary-light);
+  margin-top: 0.5rem;
+  transition: gap var(--transition);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.card:hover .learnMore {
+  gap: 8px;
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

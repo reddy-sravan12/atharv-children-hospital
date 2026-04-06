@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedCare Hospital – Full Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:#0B5394;--primary-light:#1A73C8;--primary-dark:#073B6F;
+  --accent:#00B4D8;--accent-light:#90E0EF;
+  --white:#fff;--off-white:#F8FAFD;
+  --gray-50:#F0F4F8;--gray-100:#E2EAF0;--gray-200:#C5D3DF;
+  --gray-400:#8FA5B8;--gray-600:#4A6274;--gray-800:#1E2B36;
+  --font-h:'Playfair Display',Georgia,serif;
+  --font-b:'DM Sans',system-ui,sans-serif;
+  --r-sm:8px;--r-md:12px;--r-lg:20px;--r-xl:32px;
+  --sh-card:0 4px 24px rgba(11,83,148,.08);
+  --sh-hover:0 12px 40px rgba(11,83,148,.18);
+  --t:.3s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font-b);color:var(--gray-800);background:var(--white);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;height:auto;display:block}
+h1,h2,h3,h4{font-family:var(--font-h);line-height:1.25}
+.container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+
+/* ── HEADER ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:999;transition:all .4s ease;padding:.75rem 0}
+.nav.scrolled{background:rgba(255,255,255,.96);backdrop-filter:blur(20px);box-shadow:0 2px 24px rgba(11,83,148,.08);border-bottom:1px solid rgba(11,83,148,.08)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer}
+.logo-icon{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#1A73C8,#0B5394);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(11,83,148,.35)}
+.logo-icon svg{color:#fff}
+.logo-text{display:flex;flex-direction:column;line-height:1}
+.logo-name{font-family:var(--font-h);font-weight:700;font-size:1.2rem;color:#fff;transition:color .4s}
+.nav.scrolled .logo-name{color:var(--primary-dark)}
+.logo-sub{font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7);transition:color .4s}
+.nav.scrolled .logo-sub{color:var(--accent)}
+.nav-links{display:flex;align-items:center;gap:.25rem}
+.nav-link{background:none;border:none;cursor:pointer;font-family:var(--font-b);font-size:.88rem;font-weight:500;color:rgba(255,255,255,.9);padding:.6rem 1rem;border-radius:8px;transition:all .25s;position:relative}
+.nav.scrolled .nav-link{color:var(--gray-800)}
+.nav-link::after{content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%) scaleX(0);width:50%;height:2px;background:#fff;border-radius:2px;transition:transform .3s}
+.nav.scrolled .nav-link::after{background:var(--primary)}
+.nav-link:hover::after,.nav-link.active::after{transform:translateX(-50%) scaleX(1)}
+.nav-link:hover{background:rgba(255,255,255,.1)}
+.nav.scrolled .nav-link:hover{background:rgba(11,83,148,.06)}
+.btn-nav{padding:.7rem 1.6rem;border-radius:50px;background:linear-gradient(135deg,#00B4D8,#0077B6);color:#fff;font-weight:600;font-size:.85rem;cursor:pointer;border:none;font-family:var(--font-b);transition:all .3s;box-shadow:0 4px 16px rgba(0,180,216,.35)}
+.btn-nav:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,180,216,.45)}
+
+/* ── HERO ── */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;padding-top:80px}
+.hero-bg{position:absolute;inset:0;overflow:hidden}
+.hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transform:scale(1.04);transition:opacity 1.2s ease,transform 6s ease}
+.hero-slide.active{opacity:1;transform:scale(1)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(7,59,111,.9),rgba(11,83,148,.78),rgba(7,59,111,.85))}
+.shape{position:absolute;border-radius:50%;pointer-events:none}
+.s1{width:320px;height:320px;top:-80px;right:-60px;border:1px solid rgba(0,180,216,.15);background:radial-gradient(circle,rgba(0,180,216,.12),transparent 70%);animation:float1 4s ease-in-out infinite}
+.s2{width:200px;height:200px;bottom:15%;left:-50px;border:1px solid rgba(144,224,239,.1);background:radial-gradient(circle,rgba(144,224,239,.08),transparent 70%);animation:float2 5s ease-in-out infinite}
+.s3{width:120px;height:120px;top:35%;right:40%;border:1px solid rgba(255,255,255,.06);animation:float3 6s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-20px) rotate(5deg)}}
+@keyframes float2{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(15px) rotate(-8deg)}}
+@keyframes float3{0%,100%{transform:translateY(0) translateX(0)}50%{transform:translateY(-12px) translateX(8px)}}
+.hero-content{position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:3rem;max-width:1200px;margin:0 auto;padding:4rem 2rem 2rem;width:100%;animation:heroIn .8s ease both}
+@keyframes heroIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.hero-text{flex:1;max-width:600px}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,180,216,.18);color:#90E0EF;border:1px solid rgba(0,180,216,.35);border-radius:20px;padding:6px 14px;font-size:.72rem;font-weight:600;letter-spacing:.05em;margin-bottom:1.5rem}
+.hero-badge svg{width:14px;height:14px}
+.hero-name{font-size:clamp(2rem,4vw,3.5rem);color:#fff;font-weight:700;line-height:1.1;margin-bottom:.5rem}
+.hero-role{font-size:1.1rem;color:rgba(255,255,255,.8);font-weight:500;margin-bottom:.3rem}
+.hero-qual{font-size:.82rem;color:rgba(144,224,239,.85);margin-bottom:1.75rem}
+.hero-desc{font-size:1rem;color:rgba(255,255,255,.72);line-height:1.75;max-width:480px;margin-bottom:2.5rem}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{padding:.95rem 2.2rem;border-radius:50px;background:linear-gradient(135deg,#00B4D8,#0077B6);color:#fff;font-weight:600;font-size:1rem;border:none;cursor:pointer;font-family:var(--font-b);box-shadow:0 8px 28px rgba(0,180,216,.4);transition:all .3s;display:flex;align-items:center;gap:8px}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(0,180,216,.5)}
+.btn-outline{padding:.9rem 2rem;border-radius:50px;background:transparent;color:#fff;font-weight:600;font-size:1rem;border:2px solid rgba(255,255,255,.5);cursor:pointer;font-family:var(--font-b);transition:all .3s}
+.btn-outline:hover{border-color:#fff;background:rgba(255,255,255,.1)}
+.doctor-card{position:relative;flex-shrink:0;width:270px;border-radius:24px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.1);animation:cardIn 1s .5s ease both}
+@keyframes cardIn{from{opacity:0;transform:translateX(50px) scale(.9)}to{opacity:1;transform:translateX(0) scale(1)}}
+.doctor-card img{width:100%;height:330px;object-fit:cover}
+.doc-overlay{position:absolute;bottom:0;left:0;right:0;padding:1.25rem 1rem 1rem;background:linear-gradient(transparent,rgba(7,59,111,.95))}
+.doc-name{font-family:var(--font-h);font-weight:700;color:#fff;font-size:1rem}
+.doc-title{color:rgba(144,224,239,.9);font-size:.82rem;margin-top:2px}
+.avail-badge{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);color:#fff;font-size:.72rem;font-weight:600;padding:5px 10px;border-radius:20px;display:flex;align-items:center;gap:5px;border:1px solid rgba(255,255,255,.15)}
+.avail-dot{width:7px;height:7px;border-radius:50%;background:#4CAF50;box-shadow:0 0 6px rgba(76,175,80,.8);animation:dotPulse 2s infinite}
+@keyframes dotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.4)}}
+.stats-bar{position:relative;z-index:3;display:flex;justify-content:space-around;max-width:1200px;margin:0 auto;padding:2rem;width:100%;border-top:1px solid rgba(255,255,255,.1);margin-top:1rem}
+.stat{text-align:center;padding:0 1.5rem}
+.stat+.stat{border-left:1px solid rgba(255,255,255,.12)}
+.stat-val{font-family:var(--font-h);font-weight:700;color:#fff;font-size:1.85rem;line-height:1}
+.stat-lbl{color:rgba(255,255,255,.6);font-size:.8rem;font-weight:500;margin-top:4px}
+
+/* ── SECTION COMMON ── */
+.section-header{text-align:center;margin-bottom:4rem}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--primary-light);margin-bottom:.9rem}
+.eyebrow::before,.eyebrow::after{content:'';display:block;width:28px;height:1.5px;background:var(--accent)}
+.sec-title{font-size:clamp(2rem,4vw,2.8rem);color:var(--gray-800);margin-bottom:.9rem}
+.sec-sub{font-family:var(--font-b);font-size:1rem;color:var(--gray-600);max-width:540px;margin:0 auto;line-height:1.7}
+
+/* ── DOCTORS ── */
+.doctors-section{padding:7rem 0;background:var(--white)}
+.doctors-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.doc-card{background:var(--white);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-card);transition:transform var(--t),box-shadow var(--t);cursor:pointer}
+.doc-card:hover{transform:translateY(-8px);box-shadow:var(--sh-hover)}
+.doc-card-img{position:relative;overflow:hidden;height:230px}
+.doc-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.doc-card:hover .doc-card-img img{transform:scale(1.06)}
+.doc-img-overlay{position:absolute;inset:0;background:linear-gradient(transparent 55%,rgba(7,59,111,.5))}
+.exp-badge{position:absolute;bottom:10px;right:10px;background:rgba(11,83,148,.9);backdrop-filter:blur(8px);color:#fff;font-size:.72rem;font-weight:600;padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:4px;border:1px solid rgba(255,255,255,.2)}
+.doc-card-body{padding:1.2rem 1.4rem 1.5rem}
+.doc-card-name{font-family:var(--font-h);font-weight:700;font-size:1.05rem;color:var(--primary-dark);margin-bottom:2px}
+.doc-card-desig{font-size:.83rem;color:var(--primary-light);font-weight:600;margin-bottom:.7rem}
+.doc-chip{display:inline-block;background:var(--gray-50);color:var(--gray-600);font-size:.72rem;font-weight:500;padding:4px 10px;border-radius:20px;margin-bottom:.5rem}
+.doc-qual{font-size:.75rem;color:var(--gray-400);font-style:italic}
+
+/* ── SERVICES ── */
+.services-section{padding:7rem 0;background:var(--off-white)}
+.services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+.svc-card{background:var(--white);border-radius:var(--r-md);padding:1.75rem 1.4rem;display:flex;flex-direction:column;gap:.65rem;box-shadow:var(--sh-card);border:1px solid transparent;transition:all var(--t);cursor:pointer}
+.svc-card:hover{transform:translateY(-6px);box-shadow:var(--sh-hover);border-color:rgba(26,115,200,.15)}
+.svc-icon-box{width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,var(--gray-50),var(--gray-100));display:flex;align-items:center;justify-content:center;font-size:1.45rem;transition:all var(--t)}
+.svc-card:hover .svc-icon-box{background:linear-gradient(135deg,rgba(26,115,200,.12),rgba(0,180,216,.08));transform:scale(1.08)}
+.svc-title{font-family:var(--font-h);font-weight:600;font-size:1rem;color:var(--primary-dark)}
+.svc-desc{font-size:.85rem;color:var(--gray-600);line-height:1.65;flex-grow:1}
+.svc-more{display:flex;align-items:center;gap:4px;font-size:.75rem;font-weight:600;color:var(--primary-light);margin-top:.4rem;transition:gap var(--t)}
+.svc-card:hover .svc-more{gap:8px}
+
+/* ── OP REGISTRATION ── */
+.op-section{padding:7rem 0;background:linear-gradient(180deg,var(--off-white),#EDF4FC)}
+.op-form-wrap{max-width:760px;margin:0 auto;background:var(--white);border-radius:var(--r-xl);padding:2.5rem 3rem;box-shadow:0 20px 60px rgba(11,83,148,.18);border:1px solid rgba(11,83,148,.06)}
+.steps{display:flex;justify-content:center;gap:0;margin-bottom:2.5rem;position:relative}
+.steps::before{content:'';position:absolute;top:18px;left:20%;right:20%;height:2px;background:var(--gray-100);z-index:0}
+.step{display:flex;flex-direction:column;align-items:center;gap:.5rem;flex:1;position:relative;z-index:1}
+.step-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:700;border:2px solid var(--gray-200);background:var(--white);color:var(--gray-400);transition:all .3s;font-family:var(--font-b)}
+.step.active .step-circle{border-color:var(--primary);background:var(--primary);color:#fff;box-shadow:0 4px 14px rgba(11,83,148,.35)}
+.step.done .step-circle{border-color:#2E7D32;background:#2E7D32;color:#fff}
+.step-lbl{font-size:.75rem;font-weight:500;color:var(--gray-400);font-family:var(--font-b)}
+.step.active .step-lbl{color:var(--primary);font-weight:600}
+.step-title-form{font-family:var(--font-h)!important;font-size:1.1rem!important;color:var(--primary-dark)!important;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:1px solid var(--gray-100)}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-bottom:1.5rem}
+.form-grid.full .field{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:.4rem}
+.field.span2{grid-column:1/-1}
+.field label{font-size:.82rem;font-weight:600;color:var(--gray-600);font-family:var(--font-b)}
+.field input,.field textarea,.field select{width:100%;padding:.75rem 1rem;border:1.5px solid var(--gray-200);border-radius:var(--r-sm);font-family:var(--font-b);font-size:.9rem;color:var(--gray-800);background:var(--white);transition:border-color .2s,box-shadow .2s;outline:none}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--primary-light);box-shadow:0 0 0 3px rgba(26,115,200,.12)}
+.field textarea{resize:vertical;min-height:80px}
+.step-nav{display:flex;justify-content:flex-end;gap:1rem;padding-top:1.5rem;border-top:1px solid var(--gray-100);margin-top:.5rem}
+.btn-back{padding:.8rem 1.75rem;border-radius:50px;border:2px solid var(--primary);color:var(--primary);background:transparent;cursor:pointer;font-family:var(--font-b);font-weight:600;font-size:.9rem;transition:all .2s}
+.btn-back:hover{background:rgba(11,83,148,.05)}
+.btn-submit{padding:.85rem 2rem;border-radius:50px;background:linear-gradient(135deg,var(--primary-light),var(--primary));color:#fff;border:none;cursor:pointer;font-family:var(--font-b);font-weight:600;font-size:.9rem;box-shadow:0 4px 18px rgba(11,83,148,.35);transition:all .3s}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(11,83,148,.45)}
+
+/* Confirmation */
+.confirm-panel{display:flex;flex-direction:column;align-items:center;text-align:center;padding:1rem 0;animation:fadeIn .5s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.confirm-icon{width:88px;height:88px;border-radius:50%;background:rgba(46,125,50,.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;font-size:2.5rem}
+.confirm-title{font-family:var(--font-h);font-size:1.8rem;font-weight:700;color:var(--primary-dark);margin-bottom:.4rem}
+.confirm-sub{color:var(--gray-600);font-size:.95rem;margin-bottom:2rem}
+.confirm-slip{width:100%;max-width:460px;background:var(--off-white);border:1px solid var(--gray-100);border-radius:var(--r-md);padding:1.5rem;text-align:left}
+.slip-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem}
+.slip-hosp{font-weight:700;color:var(--primary-dark);font-size:.95rem}
+.slip-status{background:rgba(46,125,50,.1);color:#2E7D32;font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase}
+.slip-id{font-size:.72rem;color:var(--gray-400);font-family:monospace;margin-bottom:1rem}
+.slip-row{display:flex;gap:.75rem;padding:.3rem 0;align-items:flex-start}
+.slip-label{font-size:.78rem;color:var(--gray-400);min-width:100px;flex-shrink:0}
+.slip-val{font-size:.85rem;font-weight:600;color:var(--gray-800)}
+.divider{height:1px;background:var(--gray-100);margin:.75rem 0}
+.confirm-actions{display:flex;gap:1rem;margin-top:1.75rem;flex-wrap:wrap;justify-content:center;width:100%;max-width:460px}
+.btn-pdf{flex:1;min-width:170px;padding:.9rem 1.5rem;border-radius:50px;background:linear-gradient(135deg,var(--primary-light),var(--primary));color:#fff;border:none;cursor:pointer;font-family:var(--font-b);font-weight:600;font-size:.9rem;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 18px rgba(11,83,148,.35);transition:all .3s}
+.btn-pdf:hover{transform:translateY(-2px)}
+.btn-wa{flex:1;min-width:170px;padding:.9rem 1.5rem;border-radius:50px;background:#25D366;color:#fff;border:none;cursor:pointer;font-family:var(--font-b);font-weight:600;font-size:.9rem;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 18px rgba(37,211,102,.35);transition:all .3s}
+.btn-wa:hover{transform:translateY(-2px);background:#1DA851}
+.btn-new{margin-top:1rem;background:none;border:none;cursor:pointer;color:var(--primary-light);font-family:var(--font-b);font-weight:500;font-size:.85rem;text-decoration:underline}
+
+/* ── REVIEWS ── */
+.reviews-section{padding:7rem 0;background:var(--white);overflow:hidden}
+.reviews-track-wrap{overflow:hidden;position:relative;padding:.5rem 0}
+.reviews-track{display:flex;gap:1.5rem;width:max-content}
+.scroll-left{animation:scrollLeft 40s linear infinite}
+.scroll-right{animation:scrollRight 40s linear infinite}
+.reviews-track-wrap:hover .scroll-left,.reviews-track-wrap:hover .scroll-right{animation-play-state:paused}
+@keyframes scrollLeft{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes scrollRight{0%{transform:translateX(-50%)}100%{transform:translateX(0)}}
+.review-card{flex-shrink:0;width:310px;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-md);padding:1.5rem;display:flex;flex-direction:column;box-shadow:var(--sh-card);transition:box-shadow .3s,transform .3s}
+.review-card:hover{box-shadow:var(--sh-hover);transform:translateY(-4px)}
+.review-quote{font-size:2rem;color:rgba(26,115,200,.25);margin-bottom:.5rem;font-family:Georgia,serif;line-height:1}
+.review-text{font-size:.88rem;color:var(--gray-600);line-height:1.7;margin-bottom:1.25rem;font-style:italic;flex-grow:1}
+.review-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.review-name{font-weight:600;font-size:.88rem;color:var(--primary-dark)}
+.review-date{font-size:.73rem;color:var(--gray-400);margin-top:1px}
+.stars{display:flex;gap:2px;color:#F59E0B;font-size:.85rem}
+.fade-left,.fade-right{position:absolute;top:0;bottom:0;width:100px;pointer-events:none;z-index:2}
+.fade-left{left:0;background:linear-gradient(to right,var(--white),transparent)}
+.fade-right{right:0;background:linear-gradient(to left,var(--white),transparent)}
+
+/* ── CONTACT ── */
+.contact-section{padding:7rem 0;background:var(--off-white)}
+.contact-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:2rem;align-items:start}
+.contact-info{background:linear-gradient(145deg,#0B5394,#073B6F);border-radius:var(--r-lg);padding:2.5rem 2rem;position:relative;overflow:hidden}
+.contact-info::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:rgba(0,180,216,.12)}
+.info-title{font-family:var(--font-h);font-size:1.35rem;color:#fff;font-weight:700;margin-bottom:.4rem}
+.info-sub{color:rgba(255,255,255,.65);font-size:.88rem;margin-bottom:2rem}
+.info-items{display:flex;flex-direction:column;gap:1.3rem;position:relative;z-index:1}
+.info-item{display:flex;align-items:flex-start;gap:.9rem;text-decoration:none}
+.info-icon{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#90E0EF;font-size:1rem}
+.info-label{font-size:.7rem;color:rgba(144,224,239,.8);font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:2px}
+.info-val{font-size:.88rem;color:#fff;line-height:1.5}
+.emerg-banner{margin-top:2rem;padding:1.1rem 1.4rem;background:rgba(255,255,255,.08);border-radius:var(--r-sm);border:1px solid rgba(255,255,255,.12);position:relative;z-index:1}
+.emerg-label{font-size:.68rem;font-weight:700;color:#FFD700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+.emerg-num{font-size:1.25rem;font-weight:700;color:#fff;text-decoration:none;letter-spacing:.04em}
+.contact-form{background:var(--white);border-radius:var(--r-lg);padding:2.5rem;box-shadow:var(--sh-card)}
+.form-title{font-family:var(--font-h);font-size:1.2rem;color:var(--primary-dark);margin-bottom:.4rem}
+.form-sub{color:var(--gray-600);font-size:.85rem;margin-bottom:1.75rem}
+.contact-form .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:0}
+.btn-send{width:100%;padding:1rem;border-radius:50px;background:linear-gradient(135deg,var(--primary-light),var(--primary));color:#fff;border:none;cursor:pointer;font-family:var(--font-b);font-weight:600;font-size:1rem;margin-top:1.25rem;box-shadow:0 4px 18px rgba(11,83,148,.35);transition:all .3s}
+.btn-send:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(11,83,148,.45)}
+
+/* ── MAP ── */
+.map-section{padding:7rem 0;background:var(--white)}
+.map-container{position:relative;border-radius:var(--r-lg);overflow:hidden;height:460px;box-shadow:var(--sh-hover);background:#e8e0d5}
+.map-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#e8f0f7,#d5e5f2);flex-direction:column;gap:1rem}
+.map-pin-wrap{position:relative;cursor:pointer}
+.map-pin{width:50px;height:50px;border-radius:50% 50% 50% 0;background:linear-gradient(135deg,#1A73C8,#0B5394);transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(11,83,148,.5);animation:pinBounce 2s ease-in-out infinite}
+.map-pin svg{transform:rotate(45deg);color:#fff;width:22px;height:22px}
+.map-pulse{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:70px;height:70px;border-radius:50%;background:rgba(26,115,200,.22);animation:pulse 2s ease-out infinite}
+@keyframes pulse{0%{transform:translate(-50%,-50%) scale(.5);opacity:1}100%{transform:translate(-50%,-50%) scale(1.8);opacity:0}}
+@keyframes pinBounce{0%,100%{transform:rotate(-45deg) translateY(0)}50%{transform:rotate(-45deg) translateY(-8px)}}
+.map-label{font-family:var(--font-h);font-size:1.1rem;color:var(--primary-dark);font-weight:700;text-align:center}
+.map-addr{font-size:.85rem;color:var(--gray-600);text-align:center}
+.map-overlay-card{position:absolute;top:20px;left:20px;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);border-radius:var(--r-md);padding:1.25rem 1.4rem;max-width:290px;box-shadow:0 8px 32px rgba(0,0,0,.15);z-index:10;border:1px solid rgba(11,83,148,.08)}
+.map-card-title{font-weight:700;color:var(--primary-dark);font-size:.93rem;margin-bottom:3px}
+.map-card-addr{color:var(--gray-600);font-size:.78rem;line-height:1.5;margin-bottom:1rem}
+.map-btns{display:flex;gap:.6rem;flex-wrap:wrap}
+.btn-dir{padding:.6rem 1.2rem;border-radius:50px;background:linear-gradient(135deg,var(--primary-light),var(--primary));color:#fff;border:none;cursor:pointer;font-family:var(--font-b);font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:5px;transition:all .2s}
+.btn-dir:hover{transform:translateY(-1px)}
+.btn-loc{padding:.58rem 1.2rem;border-radius:50px;background:transparent;color:var(--primary);border:1.5px solid var(--primary);cursor:pointer;font-family:var(--font-b);font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:5px;transition:all .2s}
+.btn-loc:hover{background:rgba(11,83,148,.06)}
+.map-hours{margin-top:.9rem;padding-top:.75rem;border-top:1px solid var(--gray-100)}
+.map-hour-row{display:flex;justify-content:space-between;font-size:.76rem;color:var(--gray-600);padding:2px 0}
+.map-hour-row span:first-child{font-weight:600;color:var(--gray-800)}
+.tag-247{background:rgba(46,125,50,.1);color:#2E7D32;font-weight:700;padding:1px 8px;border-radius:20px;font-size:.72rem}
+
+/* ── FOOTER ── */
+.footer{background:linear-gradient(145deg,#073B6F,#0B5394,#073B6F);padding:5rem 0 2rem}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:3rem}
+.footer-logo{display:flex;align-items:center;gap:.9rem;margin-bottom:1.25rem}
+.footer-logo-icon{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#1A73C8,#0B5394);display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.15)}
+.footer-brand-name{font-family:var(--font-h);font-weight:700;font-size:1.25rem;color:#fff}
+.footer-brand-sub{font-size:.6rem;color:rgba(144,224,239,.8);letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+.footer-desc{color:rgba(255,255,255,.55);font-size:.85rem;line-height:1.7;margin-bottom:1.5rem;max-width:270px}
+.footer-contact a{display:flex;align-items:center;gap:.6rem;color:rgba(255,255,255,.7);font-size:.85rem;margin-bottom:.6rem;transition:color .2s}
+.footer-contact a:hover{color:#90E0EF}
+.footer-contact a svg{font-size:15px;color:#90E0EF}
+.socials{display:flex;gap:.25rem;margin-top:1.25rem}
+.social-btn{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);font-size:.85rem;transition:all .2s;border:1px solid rgba(255,255,255,.06);cursor:pointer}
+.social-btn:hover{background:rgba(255,255,255,.12);color:#90E0EF}
+.foot-col-title{font-size:.7rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(144,224,239,.9);margin-bottom:1.1rem;font-family:var(--font-b)}
+.foot-link,.foot-item{display:block;background:none;border:none;cursor:pointer;font-family:var(--font-b);font-size:.85rem;color:rgba(255,255,255,.6);margin-bottom:.7rem;text-align:left;transition:color .2s;padding:0}
+.foot-link:hover{color:#90E0EF}
+.foot-emerg{margin-top:1.5rem;padding:.9rem 1.1rem;background:rgba(255,255,255,.07);border-radius:10px;border:1px solid rgba(255,255,255,.1)}
+.foot-emerg-label{font-size:.68rem;font-weight:700;color:#FFD700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+.foot-emerg-num{font-size:1.05rem;font-weight:700;color:#fff}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:2rem;margin-top:2rem;border-top:1px solid rgba(255,255,255,.08);flex-wrap:wrap;gap:1rem}
+.footer-copy{color:rgba(255,255,255,.38);font-size:.78rem}
+.footer-legal{display:flex;gap:2rem}
+.footer-legal a{color:rgba(255,255,255,.38);font-size:.78rem;transition:color .2s}
+.footer-legal a:hover{color:rgba(255,255,255,.65)}
+
+/* Responsive */
+@media(max-width:1100px){.services-grid{grid-template-columns:repeat(3,1fr)}.footer-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.hero-content{flex-direction:column;align-items:flex-start;padding:3rem 1.5rem 2rem}.doctors-grid{grid-template-columns:repeat(2,1fr)}.contact-grid{grid-template-columns:1fr}.services-grid{grid-template-columns:repeat(2,1fr)}.footer-grid{grid-template-columns:1fr 1fr;gap:2rem}}
+@media(max-width:600px){.stats-bar{flex-wrap:wrap;gap:1.5rem}.stat{flex:1 1 40%;padding:.5rem}.stat+.stat{border-left:none}.doctors-grid,.services-grid{grid-template-columns:1fr}.contact-form .form-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.op-form-wrap{padding:1.75rem 1.25rem}.footer-grid{grid-template-columns:1fr}.confirm-actions{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- ────────────── HEADER ────────────── -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <div class="logo" onclick="scrollTo({top:0,behavior:'smooth'})">
+      <div class="logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+      </div>
+      <div class="logo-text"><span class="logo-name">MedCare</span><span class="logo-sub">Hospital</span></div>
+    </div>
+    <div class="nav-links">
+      <button class="nav-link active" onclick="scrollToSection('doctors')">Our Doctors</button>
+      <button class="nav-link" onclick="scrollToSection('services')">Our Services</button>
+      <button class="nav-link" onclick="scrollToSection('reviews')">Reviews</button>
+      <button class="nav-link" onclick="scrollToSection('contact')">Contact Us</button>
+      <button class="nav-link" onclick="scrollToSection('map')">Locate Us</button>
+      <button class="btn-nav" onclick="scrollToSection('op-registration')">📅 Book Appointment</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ────────────── HERO ────────────── -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="hero-slide active" style="background-image:url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1920&h=1080&fit=crop')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=1920&h=1080&fit=crop')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=1920&h=1080&fit=crop')"></div>
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="shape s1"></div>
+  <div class="shape s2"></div>
+  <div class="shape s3"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#90E0EF"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+        NABL Accredited · JCI Certified Hospital
+      </div>
+      <h1 class="hero-name">Dr. Ananya Sharma</h1>
+      <div class="hero-role">Chief of Cardiology</div>
+      <div class="hero-qual">MBBS, MD, DM (Cardiology) · 22 Years Experience</div>
+      <p class="hero-desc">Leading our cardiac care unit with cutting-edge interventional techniques and a compassionate approach — because every heartbeat matters.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="scrollToSection('op-registration')">
+          📅 Book Appointment
+        </button>
+        <button class="btn-outline" onclick="scrollToSection('doctors')">Meet Our Doctors</button>
+      </div>
+    </div>
+    <div class="doctor-card">
+      <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=600&h=700&fit=crop&crop=face" alt="Dr. Ananya Sharma" loading="eager">
+      <div class="doc-overlay">
+        <div class="doc-name">Dr. Ananya Sharma</div>
+        <div class="doc-title">Chief of Cardiology</div>
+      </div>
+      <div class="avail-badge"><div class="avail-dot"></div>Available Today</div>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-val">15,000+</div><div class="stat-lbl">Happy Patients</div></div>
+    <div class="stat"><div class="stat-val">120+</div><div class="stat-lbl">Expert Doctors</div></div>
+    <div class="stat"><div class="stat-val">25+</div><div class="stat-lbl">Specialities</div></div>
+    <div class="stat"><div class="stat-val">98%</div><div class="stat-lbl">Success Rate</div></div>
+  </div>
+</section>
+
+<!-- ────────────── DOCTORS ────────────── -->
+<section class="doctors-section" id="doctors">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow"><span>+</span>Our Specialists<span>+</span></div>
+      <h2 class="sec-title">Meet Our Expert Doctors</h2>
+      <p class="sec-sub">Our team of highly experienced specialists brings world-class expertise and unwavering commitment to your health.</p>
+    </div>
+    <div class="doctors-grid" id="doctorsGrid"></div>
+  </div>
+</section>
+
+<!-- ────────────── SERVICES ────────────── -->
+<section class="services-section" id="services">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow"><span>+</span>What We Offer<span>+</span></div>
+      <h2 class="sec-title">Our Clinical Services</h2>
+      <p class="sec-sub">From preventive care to complex interventions, equipped with cutting-edge technology and expert teams.</p>
+    </div>
+    <div class="services-grid" id="servicesGrid"></div>
+  </div>
+</section>
+
+<!-- ────────────── OP REGISTRATION ────────────── -->
+<section class="op-section" id="op-registration">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow"><span>+</span>Book Now<span>+</span></div>
+      <h2 class="sec-title">OP Registration</h2>
+      <p class="sec-sub">Register for an outpatient appointment in minutes. Receive a confirmation slip you can save and share instantly.</p>
+    </div>
+    <div class="op-form-wrap" id="opFormWrap"></div>
+  </div>
+</section>
+
+<!-- ────────────── REVIEWS ────────────── -->
+<section class="reviews-section" id="reviews">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow"><span>+</span>Patient Voices<span>+</span></div>
+      <h2 class="sec-title">What Our Patients Say</h2>
+      <p class="sec-sub">Thousands of patients trust MedCare for their most critical healthcare needs.</p>
+    </div>
+  </div>
+  <div style="position:relative">
+    <div class="reviews-track-wrap" style="margin-bottom:1.5rem"><div class="reviews-track scroll-left" id="reviewsRow1"></div></div>
+    <div class="reviews-track-wrap"><div class="reviews-track scroll-right" id="reviewsRow2"></div></div>
+    <div class="fade-left"></div><div class="fade-right"></div>
+  </div>
+</section>
+
+<!-- ────────────── CONTACT ────────────── -->
+<section class="contact-section" id="contact">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow"><span>+</span>Get In Touch<span>+</span></div>
+      <h2 class="sec-title">Contact Us</h2>
+      <p class="sec-sub">Have a question or need to schedule a consultation? Our team is here to help.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3 class="info-title">We are here for you</h3>
+        <p class="info-sub">Reach our team for appointments, queries, or emergency assistance.</p>
+        <div class="info-items">
+          <a href="tel:+919876543210" class="info-item"><div class="info-icon">📞</div><div><div class="info-label">Phone</div><div class="info-val">+91 98765 43210</div></div></a>
+          <a href="mailto:care@medcarehospital.in" class="info-item"><div class="info-icon">✉️</div><div><div class="info-label">Email</div><div class="info-val">care@medcarehospital.in</div></div></a>
+          <div class="info-item"><div class="info-icon">📍</div><div><div class="info-label">Address</div><div class="info-val">42 Healthcare Avenue, Bandra West, Mumbai 400050</div></div></div>
+          <div class="info-item"><div class="info-icon">🕐</div><div><div class="info-label">Hours</div><div class="info-val">OPD: Mon–Sat 9AM–7PM · Emergency: 24/7</div></div></div>
+        </div>
+        <div class="emerg-banner"><div class="emerg-label">24/7 Emergency</div><div class="emerg-num">1800-MED-CARE</div></div>
+      </div>
+      <div class="contact-form">
+        <div class="form-title">Send us a message</div>
+        <div class="form-sub">We typically respond within 24 hours on business days.</div>
+        <div class="form-grid">
+          <div class="field"><label>Full Name *</label><input placeholder="Your full name"></div>
+          <div class="field"><label>Phone *</label><input placeholder="+91 XXXXX XXXXX"></div>
+          <div class="field span2"><label>Email *</label><input type="email" placeholder="your@email.com"></div>
+          <div class="field span2"><label>Subject *</label><input placeholder="How can we help?"></div>
+          <div class="field span2"><label>Message *</label><textarea placeholder="Your message..."></textarea></div>
+        </div>
+        <button class="btn-send" onclick="handleContactSubmit(this)">Send Message →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── MAP ────────────── -->
+<section class="map-section" id="map">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow"><span>+</span>Find Us<span>+</span></div>
+      <h2 class="sec-title">Our Location</h2>
+      <p class="sec-sub">Conveniently located in Bandra West, Mumbai with easy access by road, rail, and metro.</p>
+    </div>
+    <div class="map-container">
+      <div class="map-placeholder">
+        <div class="map-pin-wrap">
+          <div class="map-pulse"></div>
+          <div class="map-pin"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+        </div>
+        <div class="map-label">MedCare Hospital</div>
+        <div class="map-addr">42 Healthcare Avenue, Bandra West, Mumbai</div>
+      </div>
+      <div class="map-overlay-card">
+        <div class="map-card-title">📍 MedCare Hospital</div>
+        <div class="map-card-addr">42 Healthcare Avenue, Bandra West, Mumbai — 400050</div>
+        <div class="map-btns">
+          <button class="btn-dir" onclick="window.open('https://maps.google.com/?q=19.0596,72.8295','_blank')">🗺 Get Directions</button>
+          <button class="btn-loc" onclick="locateMe()">⊕ From Me</button>
+        </div>
+        <div class="map-hours">
+          <div class="map-hour-row"><span>OPD Hours</span><span>Mon–Sat: 9AM–7PM</span></div>
+          <div class="map-hour-row"><span>Emergency</span><span class="tag-247">24 / 7</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── FOOTER ────────────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <div class="footer-logo-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></div>
+          <div><div class="footer-brand-name">MedCare</div><div class="footer-brand-sub">Hospital</div></div>
+        </div>
+        <p class="footer-desc">Compassionate care, advanced medicine. Trusted by over 15,000 patients across Mumbai for over two decades.</p>
+        <div class="footer-contact">
+          <a href="tel:+919876543210"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#90E0EF"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>+91 98765 43210</a>
+          <a href="mailto:care@medcarehospital.in"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#90E0EF"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>care@medcarehospital.in</a>
+        </div>
+        <div class="socials">
+          <div class="social-btn">f</div><div class="social-btn">t</div>
+          <div class="social-btn">in</div><div class="social-btn">li</div><div class="social-btn">yt</div>
+        </div>
+      </div>
+      <div>
+        <div class="foot-col-title">Quick Links</div>
+        <button class="foot-link" onclick="scrollToSection('doctors')">Our Doctors</button>
+        <button class="foot-link" onclick="scrollToSection('services')">Our Services</button>
+        <button class="foot-link" onclick="scrollToSection('op-registration')">OPD Registration</button>
+        <button class="foot-link" onclick="scrollToSection('reviews')">Patient Reviews</button>
+        <button class="foot-link" onclick="scrollToSection('contact')">Contact Us</button>
+        <button class="foot-link" onclick="scrollToSection('map')">Find Us</button>
+      </div>
+      <div>
+        <div class="foot-col-title">Specialties</div>
+        <span class="foot-item">Cardiology</span><span class="foot-item">Neurology</span>
+        <span class="foot-item">Orthopaedics</span><span class="foot-item">Paediatrics</span>
+        <span class="foot-item">Oncology</span><span class="foot-item">Emergency Care</span>
+        <span class="foot-item">Ophthalmology</span><span class="foot-item">Pulmonology</span>
+      </div>
+      <div>
+        <div class="foot-col-title">Accreditations</div>
+        <span class="foot-item">● NABL Accredited Lab</span>
+        <span class="foot-item">● JCI Certified</span>
+        <span class="foot-item">● ISO 9001:2015</span>
+        <span class="foot-item">● NABH Accredited</span>
+        <span class="foot-item">● Green OT Certified</span>
+        <div class="foot-emerg"><div class="foot-emerg-label">24/7 Emergency</div><div class="foot-emerg-num">1800-MED-CARE</div></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 MedCare Hospital. All rights reserved.</div>
+      <div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Sitemap</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── DATA ──
+const DOCTORS=[
+  {name:'Dr. Ananya Sharma',designation:'Chief of Cardiology',specialization:'Interventional Cardiology',experience:'22 Years',qualification:'MBBS, MD, DM (Cardiology)',image:'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop&crop=face'},
+  {name:'Dr. Rohan Mehta',designation:'Senior Neurologist',specialization:'Neurology & Stroke Care',experience:'18 Years',qualification:'MBBS, MD, DM (Neurology)',image:'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop&crop=face'},
+  {name:'Dr. Priya Nair',designation:'Pediatric Specialist',specialization:'Neonatology & Pediatrics',experience:'15 Years',qualification:'MBBS, MD, DNB (Pediatrics)',image:'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop&crop=face'},
+  {name:'Dr. Vikram Joshi',designation:'Orthopaedic Surgeon',specialization:'Joint Replacement & Spine',experience:'20 Years',qualification:'MBBS, MS, MCh (Ortho)',image:'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop&crop=face'},
+  {name:'Dr. Kavitha Reddy',designation:'Oncology Head',specialization:'Medical Oncology',experience:'16 Years',qualification:'MBBS, MD, DM (Oncology)',image:'https://images.unsplash.com/photo-1651008376811-b90baee60c1f?w=400&h=400&fit=crop&crop=face'},
+  {name:'Dr. Suresh Pillai',designation:'General Surgeon',specialization:'Laparoscopic & GI Surgery',experience:'24 Years',qualification:'MBBS, MS, FRCS',image:'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=400&h=400&fit=crop&crop=face'},
+];
+const SERVICES=[
+  {icon:'❤️',title:'Cardiology',desc:'Advanced cardiac care with state-of-the-art cath labs, echo diagnostics, and 24/7 cardiac ICU support.'},
+  {icon:'🧠',title:'Neurology',desc:'Comprehensive brain and nervous system care including stroke management, epilepsy, and neuro-rehabilitation.'},
+  {icon:'🦴',title:'Orthopaedics',desc:'Expert joint replacements, sports injuries, spine surgery, and trauma care with robotic assistance.'},
+  {icon:'👶',title:'Paediatrics',desc:'Child-friendly care from newborns to adolescents with dedicated NICU and paediatric ICU units.'},
+  {icon:'🔬',title:'Oncology',desc:'Comprehensive cancer care with chemotherapy, radiation therapy, immunotherapy, and palliative services.'},
+  {icon:'🏥',title:'Emergency Care',desc:'24/7 emergency services with rapid response teams, trauma bays, and critical care transport.'},
+  {icon:'👁️',title:'Ophthalmology',desc:'Advanced eye care including LASIK, cataract surgery, glaucoma management, and retinal treatments.'},
+  {icon:'🫁',title:'Pulmonology',desc:'Respiratory medicine, sleep studies, bronchoscopy, and pulmonary rehabilitation programs.'},
+];
+const REVIEWS=[
+  {name:'Meera Iyer',rating:5,text:"The cardiac team at MedCare saved my father's life. Dr. Sharma is exceptional — calm, precise, and truly compassionate. The staff was attentive round the clock.",date:'March 2024'},
+  {name:'Arjun Kapoor',rating:5,text:'Had my knee replacement done by Dr. Joshi. Absolutely world-class surgery. I was walking in 3 days and back to normal life in 6 weeks. Highly recommended!',date:'February 2024'},
+  {name:'Sunita Bhatia',rating:5,text:'The paediatrics ward is so thoughtfully designed for kids. Dr. Nair was so gentle with my daughter. The whole experience was reassuring during a stressful time.',date:'January 2024'},
+  {name:'Rahul Desai',rating:4,text:'Smooth OPD experience. The digital appointment system worked flawlessly. Waiting time was minimal and the consultation was thorough and unhurried.',date:'April 2024'},
+  {name:'Fatima Khan',rating:5,text:"MedCare's oncology team guided us through an incredibly difficult journey with both medical expertise and human warmth. We are forever grateful.",date:'March 2024'},
+  {name:'Deepak Srinivas',rating:5,text:"Emergency services are truly 24/7. Came in at 2 AM and was attended to immediately. The trauma team's efficiency was remarkable. Excellent hospital.",date:'May 2024'},
+];
+const TIME_SLOTS=['09:00 AM','09:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','12:00 PM','02:00 PM','02:30 PM','03:00 PM','03:30 PM','04:00 PM','04:30 PM','05:00 PM','05:30 PM','06:00 PM'];
+
+// ── RENDER DOCTORS ──
+const dg=document.getElementById('doctorsGrid');
+DOCTORS.forEach(d=>{
+  dg.innerHTML+=`<div class="doc-card">
+    <div class="doc-card-img"><img src="${d.image}" alt="${d.name}" loading="lazy"><div class="doc-img-overlay"></div><div class="exp-badge">★ ${d.experience}</div></div>
+    <div class="doc-card-body"><div class="doc-card-name">${d.name}</div><div class="doc-card-desig">${d.designation}</div><div class="doc-chip">${d.specialization}</div><div class="doc-qual">${d.qualification}</div></div>
+  </div>`;
+});
+
+// ── RENDER SERVICES ──
+const sg=document.getElementById('servicesGrid');
+SERVICES.forEach(s=>{
+  sg.innerHTML+=`<div class="svc-card">
+    <div class="svc-icon-box">${s.icon}</div>
+    <div class="svc-title">${s.title}</div>
+    <div class="svc-desc">${s.desc}</div>
+    <div class="svc-more">Learn more →</div>
+  </div>`;
+});
+
+// ── RENDER REVIEWS ──
+function reviewHTML(r){const stars='⭐'.repeat(r.rating);return`<div class="review-card"><div class="review-quote">"</div><p class="review-text">${r.text}</p><div class="review-footer"><div><div class="review-name">${r.name}</div><div class="review-date">${r.date}</div></div><div class="stars">${stars}</div></div></div>`}
+const doubled=[...REVIEWS,...REVIEWS];
+document.getElementById('reviewsRow1').innerHTML=doubled.map(reviewHTML).join('');
+document.getElementById('reviewsRow2').innerHTML=[...doubled].reverse().map(reviewHTML).join('');
+
+// ── OP REGISTRATION FORM ──
+let opStep=0;
+const opWrap=document.getElementById('opFormWrap');
+let formData={};
+
+function renderOPForm(){
+  if(opStep===0){
+    opWrap.innerHTML=`
+    <div class="steps">
+      <div class="step active"><div class="step-circle">1</div><div class="step-lbl">Personal Details</div></div>
+      <div class="step"><div class="step-circle">2</div><div class="step-lbl">Appointment</div></div>
+      <div class="step"><div class="step-circle">3</div><div class="step-lbl">Confirmation</div></div>
+    </div>
+    <div class="step-title-form">Patient Information</div>
+    <div class="form-grid">
+      <div class="field"><label>Full Name *</label><input id="op-name" placeholder="As per medical records" required></div>
+      <div class="field"><label>Age *</label><input id="op-age" type="number" min="0" max="120" placeholder="Years" required></div>
+      <div class="field"><label>Gender *</label><select id="op-gender"><option value="">Select gender</option><option>Male</option><option>Female</option><option>Other</option><option>Prefer not to say</option></select></div>
+      <div class="field"><label>Phone *</label><input id="op-phone" placeholder="+91 XXXXX XXXXX" required></div>
+      <div class="field span2"><label>Email</label><input id="op-email" type="email" placeholder="For confirmation email"></div>
+      <div class="field span2"><label>Address *</label><textarea id="op-address" placeholder="Street, City, State, PIN" required></textarea></div>
+    </div>
+    <div class="step-nav"><button class="btn-submit" onclick="goStep1()">Next: Appointment →</button></div>`;
+  } else if(opStep===1){
+    const doctorOptions=DOCTORS.map(d=>`<option value="${d.name} — ${d.specialization}">${d.name} (${d.specialization})</option>`).join('');
+    const timeOptions=TIME_SLOTS.map(t=>`<option value="${t}">${t}</option>`).join('');
+    const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);
+    const minDate=tomorrow.toISOString().split('T')[0];
+    opWrap.innerHTML=`
+    <div class="steps">
+      <div class="step done"><div class="step-circle">✓</div><div class="step-lbl">Personal Details</div></div>
+      <div class="step active"><div class="step-circle">2</div><div class="step-lbl">Appointment</div></div>
+      <div class="step"><div class="step-circle">3</div><div class="step-lbl">Confirmation</div></div>
+    </div>
+    <div class="step-title-form">Appointment Details</div>
+    <div class="form-grid">
+      <div class="field span2"><label>Symptoms / Reason for Visit *</label><textarea id="op-symptoms" placeholder="Describe your symptoms or reason for visiting..." required></textarea></div>
+      <div class="field span2"><label>Preferred Doctor *</label><select id="op-doctor"><option value="">Select a doctor</option>${doctorOptions}</select></div>
+      <div class="field"><label>Appointment Date *</label><input id="op-date" type="date" min="${minDate}" required></div>
+      <div class="field"><label>Preferred Time *</label><select id="op-time"><option value="">Select time slot</option>${timeOptions}</select></div>
+    </div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="opStep=0;renderOPForm()">← Back</button>
+      <button class="btn-submit" onclick="submitOP()">Confirm Appointment ✓</button>
+    </div>`;
+  } else {
+    const id=generateRegId();
+    const dateFormatted=formData.date?new Date(formData.date).toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'}):formData.date;
+    opWrap.innerHTML=`
+    <div class="confirm-panel">
+      <div class="confirm-icon">✅</div>
+      <div class="confirm-title">Appointment Confirmed!</div>
+      <div class="confirm-sub">Your registration has been submitted successfully.</div>
+      <div class="confirm-slip">
+        <div class="slip-header"><span class="slip-hosp">MedCare Hospital</span><span class="slip-status">CONFIRMED</span></div>
+        <div class="slip-id">${id}</div>
+        <div class="divider"></div>
+        <div class="slip-row"><span class="slip-label">Patient</span><span class="slip-val">${formData.name}</span></div>
+        <div class="slip-row"><span class="slip-label">Age / Gender</span><span class="slip-val">${formData.age} yrs · ${formData.gender}</span></div>
+        <div class="slip-row"><span class="slip-label">Phone</span><span class="slip-val">${formData.phone}</span></div>
+        <div class="slip-row"><span class="slip-label">Doctor</span><span class="slip-val">${formData.doctor}</span></div>
+        <div class="slip-row"><span class="slip-label">Date</span><span class="slip-val">${dateFormatted}</span></div>
+        <div class="slip-row"><span class="slip-label">Time</span><span class="slip-val">${formData.time}</span></div>
+        <div class="divider"></div>
+        <div style="font-size:.78rem;color:#8FA5B8;margin-bottom:4px">Reason for Visit</div>
+        <div style="font-size:.85rem;color:#4A6274;line-height:1.5">${formData.symptoms}</div>
+      </div>
+      <div class="confirm-actions">
+        <button class="btn-pdf" onclick="downloadPDF('${id}','${dateFormatted}')">📄 Download PDF Slip</button>
+        <button class="btn-wa" onclick="sendWhatsApp('${id}','${dateFormatted}')">💬 Send via WhatsApp</button>
+      </div>
+      <button class="btn-new" onclick="resetOP()">Register Another Patient</button>
+    </div>`;
+  }
+}
+
+function goStep1(){
+  const name=document.getElementById('op-name').value.trim();
+  const age=document.getElementById('op-age').value;
+  const gender=document.getElementById('op-gender').value;
+  const phone=document.getElementById('op-phone').value.trim();
+  const address=document.getElementById('op-address').value.trim();
+  if(!name||!age||!gender||!phone||!address){showToast('⚠️ Please fill in all required fields.','#E53935');return;}
+  if(!/^[+]?[0-9\s\-()]{7,15}$/.test(phone)){showToast('⚠️ Enter a valid phone number.','#E53935');return;}
+  formData={name,age,gender,phone,email:document.getElementById('op-email').value,address};
+  opStep=1;renderOPForm();
+}
+
+function submitOP(){
+  const symptoms=document.getElementById('op-symptoms').value.trim();
+  const doctor=document.getElementById('op-doctor').value;
+  const date=document.getElementById('op-date').value;
+  const time=document.getElementById('op-time').value;
+  if(!symptoms||!doctor||!date||!time){showToast('⚠️ Please fill in all appointment details.','#E53935');return;}
+  formData={...formData,symptoms,doctor,date,time};
+  opStep=2;renderOPForm();
+  showToast('✅ Appointment registered successfully!','#2E7D32');
+}
+
+function resetOP(){opStep=0;formData={};renderOPForm();}
+
+function generateRegId(){return'MC-'+Date.now().toString(36).toUpperCase().slice(-6)+'-'+Math.random().toString(36).substring(2,5).toUpperCase();}
+
+async function downloadPDF(regId,dateFormatted){
+  showToast('📄 Generating PDF…','#1A73C8');
+  setTimeout(async()=>{
+    try{
+      // Dynamic jsPDF load
+      const script=document.createElement('script');
+      script.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+      document.head.appendChild(script);
+      script.onload=()=>{
+        const{jsPDF}=window.jspdf;
+        const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+        const W=doc.internal.pageSize.getWidth();
+        const m=20;
+        doc.setFillColor(11,83,148);doc.rect(0,0,W,42,'F');
+        doc.setFillColor(0,180,216);doc.rect(0,42,W,4,'F');
+        doc.setFont('helvetica','bold');doc.setFontSize(22);doc.setTextColor(255,255,255);
+        doc.text('MedCare Hospital',m,20);
+        doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(144,224,239);
+        doc.text('Compassionate Care, Advanced Medicine',m,28);
+        doc.setFontSize(8);doc.setTextColor(200,220,240);
+        doc.text('care@medcarehospital.in',W-m,20,{align:'right'});
+        doc.text('+91 98765 43210',W-m,27,{align:'right'});
+        doc.text('42 Healthcare Ave, Bandra West, Mumbai',W-m,34,{align:'right'});
+        doc.setFont('helvetica','bold');doc.setFontSize(14);doc.setTextColor(11,83,148);
+        doc.text('OUTPATIENT REGISTRATION SLIP',W/2,58,{align:'center'});
+        doc.setDrawColor(194,211,223);doc.setLineWidth(.4);doc.line(m,63,W-m,63);
+        doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(74,98,116);
+        doc.text(`Registration ID: ${regId}`,m,71);
+        doc.text(`Generated: ${new Date().toLocaleString('en-IN')}`,W-m,71,{align:'right'});
+        doc.setFillColor(232,245,233);doc.roundedRect(W/2-28,74,56,10,5,5,'F');
+        doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(46,125,50);
+        doc.text('CONFIRMED',W/2,80.5,{align:'center'});
+        let y=92;
+        const drawSection=(title)=>{doc.setFillColor(240,247,255);doc.roundedRect(m,y,W-m*2,8,2,2,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(11,83,148);doc.text(title,m+4,y+5.5);y+=14;};
+        const drawRow=(label,value)=>{doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(74,98,116);doc.text(label+':',m+2,y);doc.setFont('helvetica','bold');doc.setTextColor(30,43,54);doc.text(value||'—',m+50,y);y+=8;};
+        drawSection('PATIENT INFORMATION');
+        drawRow('Full Name',formData.name);drawRow('Age',formData.age+' years');drawRow('Gender',formData.gender);drawRow('Phone',formData.phone);drawRow('Email',formData.email||'—');
+        y+=4;drawSection('APPOINTMENT DETAILS');
+        drawRow('Assigned Doctor',formData.doctor);drawRow('Date',dateFormatted);drawRow('Time',formData.time);
+        y+=4;drawSection('REASON FOR VISIT');
+        doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(30,43,54);
+        const lines=doc.splitTextToSize(formData.symptoms||'General consultation',W-m*2-8);
+        doc.text(lines,m+4,y);y+=lines.length*6+12;
+        doc.setFillColor(255,253,231);doc.roundedRect(m,y,W-m*2,32,3,3,'F');
+        doc.setDrawColor(255,214,0);doc.setLineWidth(.5);doc.roundedRect(m,y,W-m*2,32,3,3,'S');
+        doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(120,80,0);
+        doc.text('IMPORTANT INSTRUCTIONS',m+4,y+7);
+        doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(100,70,0);
+        ['• Please arrive 15 minutes before your scheduled appointment time.','• Carry valid photo ID and any previous medical records or reports.','• Present this slip at the OPD Reception Counter before consulting.','• For rescheduling, call +91 98765 43210 at least 24 hours in advance.'].forEach((l,i)=>doc.text(l,m+4,y+14+i*5));
+        const fY=doc.internal.pageSize.getHeight()-20;
+        doc.setDrawColor(194,211,223);doc.setLineWidth(.4);doc.line(m,fY-4,W-m,fY-4);
+        doc.setFont('helvetica','italic');doc.setFontSize(7.5);doc.setTextColor(100,130,150);
+        doc.text('This is a computer-generated document. No signature required.',W/2,fY,{align:'center'});
+        doc.text('MedCare Hospital • 42 Healthcare Ave, Bandra West, Mumbai 400050',W/2,fY+5,{align:'center'});
+        doc.save(`MedCare-${regId}.pdf`);
+        showToast('✅ PDF downloaded successfully!','#2E7D32');
+      };
+    }catch(e){showToast('❌ PDF generation failed.','#E53935');}
+  },200);
+}
+
+function sendWhatsApp(regId,dateFormatted){
+  const msg=`*🏥 MedCare Hospital – Appointment Confirmation*\n\nHello! Your OPD appointment has been confirmed.\n\n*Patient Details*\n• Name: ${formData.name}\n• Age: ${formData.age} yrs | Gender: ${formData.gender}\n• Phone: ${formData.phone}\n\n*Appointment Details*\n• Doctor: ${formData.doctor}\n• Date: ${dateFormatted}\n• Time: ${formData.time}\n• Registration ID: ${regId}\n\n*Instructions:*\nPlease arrive 15 minutes early with a valid ID.\n\n📍 MedCare Hospital, Bandra West, Mumbai\n📞 +91 98765 43210\n\n_Thank you for choosing MedCare Hospital._`;
+  window.open(`https://wa.me/919876543210?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+// ── SCROLL UTILS ──
+function scrollToSection(id){const el=document.getElementById(id);if(el){const top=el.getBoundingClientRect().top+window.scrollY-80;window.scrollTo({top,behavior:'smooth'});}}
+
+// ── NAVBAR SCROLL ──
+window.addEventListener('scroll',()=>{
+  const nav=document.getElementById('mainNav');
+  if(window.scrollY>40){nav.classList.add('scrolled');}else{nav.classList.remove('scrolled');}
+},{passive:true});
+
+// ── HERO CAROUSEL ──
+let bgIdx=0;const slides=document.querySelectorAll('.hero-slide');
+setInterval(()=>{slides[bgIdx].classList.remove('active');bgIdx=(bgIdx+1)%slides.length;slides[bgIdx].classList.add('active');},5000);
+
+// ── CONTACT ──
+function handleContactSubmit(btn){btn.textContent='Sending…';setTimeout(()=>{btn.textContent='✅ Message Sent!';showToast('✅ Message sent! We will get back to you within 24 hours.','#2E7D32');setTimeout(()=>{btn.textContent='Send Message →';},3000);},1200);}
+
+// ── MAP ──
+function locateMe(){if(!navigator.geolocation){alert('Geolocation not supported.');return;}navigator.geolocation.getCurrentPosition(p=>{window.open(`https://www.google.com/maps/dir/${p.coords.latitude},${p.coords.longitude}/19.0596,72.8295`,'_blank');},()=>alert('Unable to get location.'));}
+
+// ── TOAST ──
+function showToast(msg,color='#1A73C8'){let t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:2rem;right:2rem;padding:.9rem 1.5rem;border-radius:50px;color:#fff;font-family:"DM Sans",sans-serif;font-size:.9rem;font-weight:600;z-index:9999;box-shadow:0 8px 30px rgba(0,0,0,.2);transform:translateY(20px);opacity:0;transition:all .3s ease;pointer-events:none';document.body.appendChild(t);}t.style.background=color;t.textContent=msg;requestAnimationFrame(()=>{t.style.transform='translateY(0)';t.style.opacity='1';});setTimeout(()=>{t.style.transform='translateY(20px)';t.style.opacity='0';},3500);}
+
+// ── INIT ──
+renderOPForm();
+
+// ── INTERSECTION OBSERVER (scroll reveal) ──
+const observerCfg={threshold:.15,rootMargin:'0px 0px -60px 0px'};
+const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0) scale(1)';}});},observerCfg);
+document.querySelectorAll('.doc-card,.svc-card,.review-card').forEach((el,i)=>{el.style.cssText+='opacity:0;transform:translateY(40px) scale(.97);transition:opacity .6s ease '+i*.07+'s,transform .6s ease '+i*.07+'s';obs.observe(el);});
+</script>
+</body>
+</html>

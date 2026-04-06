@@ -1,0 +1,90 @@
+/* components/Reviews/Reviews.module.css */
+
+.section {
+  padding: 7rem 0;
+  background: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.carouselWrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  padding: 0.5rem 0;
+}
+
+.carouselTrack {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+}
+
+.scrollLeft {
+  animation: scrollLeft 40s linear infinite;
+}
+
+.scrollRight {
+  animation: scrollRight 40s linear infinite;
+}
+
+.carouselWrapper:hover .scrollLeft,
+.carouselWrapper:hover .scrollRight {
+  animation-play-state: paused;
+}
+
+@keyframes scrollLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes scrollRight {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.card {
+  flex-shrink: 0;
+  width: 320px;
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: var(--radius-md);
+  padding: 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-4px);
+}
+
+.fadeLeft {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 120px;
+  background: linear-gradient(to right, var(--white), transparent);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.fadeRight {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 120px;
+  background: linear-gradient(to left, var(--white), transparent);
+  pointer-events: none;
+  z-index: 2;
+}
+
+@media (max-width: 600px) {
+  .card {
+    width: 260px;
+  }
+}

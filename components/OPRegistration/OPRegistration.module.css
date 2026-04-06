@@ -1,0 +1,152 @@
+/* components/OPRegistration/OPRegistration.module.css */
+
+.section {
+  padding: 7rem 0;
+  background: linear-gradient(180deg, var(--off-white) 0%, #EDF4FC 100%);
+  position: relative;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(11,83,148,0.2), transparent);
+}
+
+.formWrapper {
+  max-width: 760px;
+  margin: 0 auto;
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem 3rem;
+  box-shadow: var(--shadow-elevated);
+  border: 1px solid rgba(11, 83, 148, 0.06);
+}
+
+.stepper {
+  margin-bottom: 2.5rem !important;
+}
+
+.stepContent {
+  animation: fadeSlideIn 0.35s ease;
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.stepTitle {
+  font-family: '"Playfair Display", serif' !important;
+  font-weight: 600 !important;
+  color: var(--primary-dark) !important;
+  font-size: 1.1rem !important;
+  margin-bottom: 1.5rem !important;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.stepNav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--gray-100);
+  flex-wrap: wrap;
+}
+
+/* Confirmation Panel */
+.confirmationPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem 0;
+  animation: fadeSlideIn 0.4s ease;
+}
+
+.confirmIcon {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: rgba(46, 125, 50, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.confirmSlip {
+  width: 100%;
+  max-width: 480px;
+  background: var(--off-white);
+  border: 1px solid var(--gray-100);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: left;
+  margin-top: 0.5rem;
+}
+
+.slipHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.slipRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.35rem 0;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 480px;
+}
+
+@media (max-width: 768px) {
+  .formWrapper {
+    padding: 2rem 1.5rem;
+    border-radius: var(--radius-lg);
+  }
+}
+
+@media (max-width: 600px) {
+  .formWrapper {
+    padding: 1.75rem 1.25rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .stepNav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .slipHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .formWrapper {
+    padding: 1.5rem 1rem;
+  }
+
+  .confirmActions {
+    flex-direction: column;
+  }
+}
