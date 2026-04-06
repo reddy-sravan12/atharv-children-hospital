@@ -165,7 +165,7 @@ export default function MapSection() {
               </Button>
             </Box>
 
-            <Box className={styles.hours}>
+            {/* <Box className={styles.hours}>
               <Box className={styles.hoursRow}>
                 <span>OPD Hours</span>
                 <span>Mon – Sat: 9AM – 7PM</span>
@@ -174,7 +174,7 @@ export default function MapSection() {
                 <span>Emergency</span>
                 <span className={styles.emergency247}>24 / 7</span>
               </Box>
-            </Box>
+            </Box> */}
           </Box>
         </Box>
       </Box>

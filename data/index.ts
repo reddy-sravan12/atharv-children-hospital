@@ -1,11 +1,11 @@
 // data/index.ts
 
 export const HOSPITAL_INFO = {
-  name: 'MedCare Hospital',
+  name: `Atharv Children's Hospital`,
   tagline: 'Compassionate Care, Advanced Medicine',
   phone: '+91 98765 43210',
   email: 'care@medcarehospital.in',
-  address: '42 Healthcare Avenue, Bandra West, Mumbai - 400050',
+  address: 'Rotary Nagar, LN Peta, Jadapeta, Peddakota, Andhra Pradesh 532458',
   whatsapp: '919876543210',
   coordinates: { lat: 18.629303216224542, lng:  83.9406710667332 },
   googleMapsUrl: 'https://maps.google.com/?q=18.629303216224542,83.9406710667332',

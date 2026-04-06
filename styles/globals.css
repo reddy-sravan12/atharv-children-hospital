@@ -117,8 +117,9 @@ section {
   font-size: 1.05rem;
   color: var(--gray-600);
   max-width: 560px;
-  margin: 0 auto;
+  margin: 0 auto !important;
   line-height: 1.7;
+
 }
 
 /* Scrollbar */
