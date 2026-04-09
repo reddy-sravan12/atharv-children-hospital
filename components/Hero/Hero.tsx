@@ -16,7 +16,7 @@ const HERO_DOCTOR = {
   subtitle: 'MBBS, MD, PGPN',
   description:
     'Experienced pediatrician with 6+ years of caring for children.\nProvides reliable diagnosis and treatment for common childhood illnesses.\nFriendly, gentle approach that keeps kids comfortable and parents confident.',
-  image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=600&h=700&fit=crop&crop=face',
+  image: 'https://atharv-children-hospital.s3.eu-north-1.amazonaws.com/chaitu_attha.jpeg',
 }
 
 const STATS = [

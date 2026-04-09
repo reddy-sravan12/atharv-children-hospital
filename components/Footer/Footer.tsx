@@ -9,7 +9,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn'
 import YouTubeIcon from '@mui/icons-material/YouTube'
 import PhoneIcon from '@mui/icons-material/Phone'
 import EmailIcon from '@mui/icons-material/Email'
-import { HOSPITAL_INFO } from '@/data'
+import { HOSPITAL_INFO, SERVICES } from '@/data'
 import styles from './Footer.module.css'
 
 const QUICK_LINKS = [
@@ -21,11 +21,11 @@ const QUICK_LINKS = [
   { label: 'Find Us', href: '#map' },
 ]
 
-const SPECIALTIES = [
-  'Cardiology', 'Neurology', 'Orthopaedics',
-  'Paediatrics', 'Oncology', 'Emergency Care',
-  'Ophthalmology', 'Pulmonology',
-]
+// const SPECIALTIES = [
+//   'Cardiology', 'Neurology', 'Orthopaedics',
+//   'Paediatrics', 'Oncology', 'Emergency Care',
+//   'Ophthalmology', 'Pulmonology',
+// ]
 
 const SOCIALS = [
   { icon: <FacebookIcon />, href: '#', label: 'Facebook' },
@@ -62,18 +62,15 @@ export default function Footer() {
                     fontWeight: 700,
                     fontSize: '1.3rem',
                     color: '#fff',
-                    lineHeight: 1,
+                    lineHeight: 1.2,
                   }}
                 >
-                  MedCare
-                </Typography>
-                <Typography sx={{ fontSize: '0.65rem', color: 'rgba(144,224,239,0.8)', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500 }}>
-                  Hospital
+                  Atharva children's <br />hospital
                 </Typography>
               </Box>
             </Box>
             <Typography sx={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.88rem', lineHeight: 1.7, mb: 2.5, maxWidth: 280 }}>
-              Compassionate care, advanced medicine. Trusted by over 15,000 patients across Mumbai for over two decades.
+              Experienced pediatrician with 6+ years of caring for children.Provides reliable diagnosis and treatment for common childhood illnesses.Friendly, gentle approach that keeps kids comfortable and parents confident.
             </Typography>
 
             {/* Contact quick links */}
@@ -97,7 +94,7 @@ export default function Footer() {
             </Box>
 
             {/* Socials */}
-            <Box sx={{ display: 'flex', gap: 0.5 }}>
+            {/* <Box sx={{ display: 'flex', gap: 0.5 }}>
               {SOCIALS.map(s => (
                 <IconButton
                   key={s.label}
@@ -114,7 +111,7 @@ export default function Footer() {
                   {s.icon}
                 </IconButton>
               ))}
-            </Box>
+            </Box> */}
           </Grid>
 
           {/* Quick Links */}
@@ -139,16 +136,16 @@ export default function Footer() {
           <Grid item xs={6} md={2.5}>
             <Typography className={styles.colTitle}>Specialties</Typography>
             <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
-              {SPECIALTIES.map(sp => (
-                <Box component="li" key={sp} sx={{ mb: 0.9 }}>
-                  <Box component="span" className={styles.footerText}>{sp}</Box>
+              {SERVICES.map(sp => (
+                <Box component="li" key={sp.id} sx={{ mb: 0.9 }}>
+                  <Box component="span" className={styles.footerText}>{sp.title}</Box>
                 </Box>
               ))}
             </Box>
           </Grid>
 
           {/* Accreditations */}
-          <Grid item xs={12} md={3}>
+          {/* <Grid item xs={12} md={3}>
             <Typography className={styles.colTitle}>Accreditations</Typography>
             {['NABL Accredited Lab', 'JCI Certified', 'ISO 9001:2015', 'NABH Accredited', 'Green OT Certified'].map(item => (
               <Box key={item} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.9 }}>
@@ -169,14 +166,14 @@ export default function Footer() {
                 {HOSPITAL_INFO.emergencyPhone}
               </Box>
             </Box>
-          </Grid>
+          </Grid> */}
         </Grid>
 
         <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)', my: 3.5 }} />
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5 }}>
           <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem' }}>
-            © {new Date().getFullYear()} MedCare Hospital. All rights reserved.
+            © {new Date().getFullYear()} Atharva children's hospital. All rights reserved.
           </Typography>
           <Box sx={{ display: 'flex', gap: 2.5 }}>
             {['Privacy Policy', 'Terms of Service', 'Sitemap'].map(item => (

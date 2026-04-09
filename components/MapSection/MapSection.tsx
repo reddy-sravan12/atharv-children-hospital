@@ -110,7 +110,7 @@ export default function MapSection() {
             Our Location
           </Typography>
           <Typography className="section-subtitle">
-            Conveniently located in Bandra West, Mumbai with easy access by road, rail, and metro.
+             {HOSPITAL_INFO.address}
           </Typography>
         </Box>
 

@@ -95,10 +95,6 @@ export default function Services() {
               >
                 {service.description}
               </Typography>
-              <Box className={styles.learnMore}>
-                <span>Learn more</span>
-                <ArrowForwardIcon sx={{ fontSize: 14 }} />
-              </Box>
             </Box>
           ))}
         </Box>
