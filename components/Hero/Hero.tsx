@@ -10,7 +10,7 @@ import { HERO_BG_IMAGES } from '@/data'
 
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
 
-const HERO_DOCTOR = {
+export const HERO_DOCTOR = {
   name: 'Dr. Challa Chaitanya',
   title: 'md consultant pediatric',
   subtitle: 'MBBS, MD, PGPN',
@@ -274,32 +274,6 @@ export default function Hero() {
               }}
             >
               Book Appointment
-            </Button>
-            <Button
-              variant="outlined"
-              size="large"
-              onClick={() => {
-                const el = document.getElementById('doctors')
-                if (el) {
-                  const top = el.getBoundingClientRect().top + window.scrollY - 80
-                  window.scrollTo({ top, behavior: 'smooth' })
-                }
-              }}
-              sx={{
-                color: '#fff',
-                borderColor: 'rgba(255,255,255,0.5)',
-                borderWidth: '2px',
-                fontSize: '1rem',
-                py: 1.5,
-                px: 3.5,
-                '&:hover': {
-                  borderColor: '#fff',
-                  background: 'rgba(255,255,255,0.1)',
-                  borderWidth: '2px',
-                },
-              }}
-            >
-              Meet Our Doctors
             </Button>
           </Box>
         </Box>

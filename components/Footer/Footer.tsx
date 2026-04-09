@@ -47,7 +47,7 @@ export default function Footer() {
 
   return (
     <Box component="footer" className={styles.footer}>
-      <Box className="container">
+      <Box className="container" width={"100%"}>
         <Grid container spacing={5}>
           {/* Brand */}
           <Grid item xs={12} md={4}>
