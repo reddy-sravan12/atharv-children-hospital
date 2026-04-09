@@ -7,6 +7,7 @@ import OPRegistration from '@/components/OPRegistration/OPRegistration'
 import Contact from '@/components/Contact/Contact'
 import MapSection from '@/components/MapSection/MapSection'
 import Footer from '@/components/Footer/Footer'
+import MedicalFlowGSAP from '@/components/doctor-cure/cureChart'
 
 export default function HomePage() {
   return (
@@ -14,7 +15,8 @@ export default function HomePage() {
       <Header />
       <main>
         <Hero />
-        <Doctors />
+        {/* <Doctors /> */}
+        <MedicalFlowGSAP/>
         <Services />
         <OPRegistration />
         <Reviews />

@@ -15,6 +15,8 @@ import toast from 'react-hot-toast'
 import styles from './Contact.module.css'
 import { HOSPITAL_INFO } from '@/data'
 
+const WHATSAPP_NUMBER='8019884588'
+
 interface ContactForm {
   name: string
   email: string
@@ -45,7 +47,7 @@ const INFO_ITEMS = [
   {
     icon: <AccessTimeIcon />,
     label: 'Hours',
-    value: 'OPD: Mon–Sat, 9AM–7PM · Emergency: 24/7',
+    value: 'OPD Hours: Mon–Sat (8–9 AM, 4–6 PM) · Sun (9 AM–12 PM)',
     href: null,
   },
 ]
@@ -61,16 +63,14 @@ export default function Contact() {
     formState: { errors },
   } = useForm<ContactForm>()
 
-  const onSubmit = async (data: ContactForm) => {
-    setSubmitting(true)
-    // Simulate API call
-    await new Promise(r => setTimeout(r, 1400))
-    setSubmitting(false)
-    setSubmitted(true)
-    toast.success('Message sent! We will get back to you within 24 hours.')
-    reset()
-    setTimeout(() => setSubmitted(false), 5000)
-  }
+  const onSubmit = (data: ContactForm) => {
+  const text = encodeURIComponent(
+    `Hi, I'm ${data.name}.\n\nSubject: ${data.subject}\n\n${data.message}\n\nPhone: ${data.phone}\nEmail: ${data.email}`
+  )
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, '_blank')
+  reset()
+  toast.success('Opening WhatsApp...')
+}
 
   return (
     <Box component="section" id="contact" className={styles.section}>
@@ -133,7 +133,7 @@ export default function Contact() {
             </Box>
 
             {/* Emergency Banner */}
-            <Box className={styles.emergencyBanner}>
+            {/* <Box className={styles.emergencyBanner}>
               <Box sx={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#FFD700', mb: 0.3 }}>
                 24/7 Emergency
               </Box>
@@ -144,7 +144,7 @@ export default function Contact() {
               >
                 {HOSPITAL_INFO.emergencyPhone}
               </Box>
-            </Box>
+            </Box> */}
           </Box>
 
           {/* Contact Form */}

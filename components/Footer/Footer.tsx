@@ -132,9 +132,9 @@ export default function Footer() {
             </Box>
           </Grid>
 
-          {/* Specialties */}
+          {/* Services */}
           <Grid item xs={6} md={2.5}>
-            <Typography className={styles.colTitle}>Specialties</Typography>
+            <Typography className={styles.colTitle}>Services</Typography>
             <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
               {SERVICES.map(sp => (
                 <Box component="li" key={sp.id} sx={{ mb: 0.9 }}>
@@ -175,7 +175,7 @@ export default function Footer() {
           <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem' }}>
             © {new Date().getFullYear()} Atharva children's hospital. All rights reserved.
           </Typography>
-          <Box sx={{ display: 'flex', gap: 2.5 }}>
+          {/* <Box sx={{ display: 'flex', gap: 2.5 }}>
             {['Privacy Policy', 'Terms of Service', 'Sitemap'].map(item => (
               <Typography
                 key={item}
@@ -186,7 +186,7 @@ export default function Footer() {
                 {item}
               </Typography>
             ))}
-          </Box>
+          </Box> */}
         </Box>
       </Box>
     </Box>

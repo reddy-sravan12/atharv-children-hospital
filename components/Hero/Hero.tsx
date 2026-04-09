@@ -320,10 +320,10 @@ export default function Hero() {
               {HERO_DOCTOR.title}
             </Typography>
           </Box>
-          <Box className={styles.availableBadge}>
+          {/* <Box className={styles.availableBadge}>
             <Box className={styles.availableDot} />
             Available Today
-          </Box>
+          </Box> */}
         </Box>
       </Box>
 
