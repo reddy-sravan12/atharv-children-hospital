@@ -11,19 +11,19 @@ import { HERO_BG_IMAGES } from '@/data'
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
 
 const HERO_DOCTOR = {
-  name: 'Dr. Ananya Sharma',
-  title: 'Chief of Cardiology',
-  subtitle: 'MBBS, MD, DM (Cardiology) · 22 Years Experience',
+  name: 'Dr. Challa Chaitanya',
+  title: 'md consultant pediatric',
+  subtitle: 'MBBS, MD, PGPN',
   description:
-    'Leading our cardiac care unit with cutting-edge interventional techniques and a compassionate approach — because every heartbeat matters.',
+    'Experienced pediatrician with 6+ years of caring for children.\nProvides reliable diagnosis and treatment for common childhood illnesses.\nFriendly, gentle approach that keeps kids comfortable and parents confident.',
   image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=600&h=700&fit=crop&crop=face',
 }
 
 const STATS = [
-  { value: '15,000+', label: 'Happy Patients' },
-  { value: '120+', label: 'Expert Doctors' },
-  { value: '25+', label: 'Specialities' },
-  { value: '98%', label: 'Success Rate' },
+  { value: '2,000+', label: 'Happy Patients' },
+  { value: '1', label: 'Experienced Doctor' },
+  { value: '3', label: 'Support Staff' },
+  { value: 'In-house', label: 'Pharmacy Available' },
 ]
 
 export default function Hero() {
@@ -170,78 +170,90 @@ export default function Hero() {
       {/* Content */}
       <Box className={styles.content} ref={contentRef}>
         <Box className={styles.textSide}>
-          <Chip
-            className="hero-eyebrow"
-            icon={<VerifiedIcon sx={{ fontSize: '14px !important' }} />}
-            label="NABL Accredited · JCI Certified Hospital"
-            sx={{
-              background: 'rgba(0,180,216,0.2)',
-              color: '#90E0EF',
-              border: '1px solid rgba(0,180,216,0.4)',
-              fontSize: '0.72rem',
-              fontWeight: 600,
-              letterSpacing: '0.04em',
-              mb: 2.5,
-              opacity: 0,
-            }}
-          />
+         {/* Eyebrow */}
+<Typography
+  className="hero-eyebrow"
+  sx={{
+    fontSize: '11px',
+    fontWeight: 500,
+    letterSpacing: '0.1em',
+    color: 'rgba(144,224,239,0.9)',
+    textTransform: 'uppercase',
+    mb: 1,
+    opacity: 0,
+  }}
+>
+  Pediatric Consultant
+</Typography>
 
-          <Typography
-            className="hero-name"
-            variant="h1"
-            sx={{
-              fontSize: { xs: '2.2rem', md: '3.2rem', lg: '3.8rem' },
-              color: '#fff',
-              fontFamily: '"Playfair Display", serif',
-              lineHeight: 1.1,
-              mb: 1,
-              opacity: 0,
-              '& em': { color: '#90E0EF', fontStyle: 'italic' },
-            }}
-          >
-            {HERO_DOCTOR.name}
-          </Typography>
+{/* Name */}
+<Typography
+  className="hero-name"
+  variant="h1"
+  sx={{
+    fontSize: { xs: '2.2rem', md: '3.2rem', lg: '3.8rem' },
+    fontFamily: '"Playfair Display", serif',
+    fontWeight: 700,
+    color: '#fff',
+    lineHeight: 1.1,
+    letterSpacing: '-0.01em',
+    mb: 0.5,
+    opacity: 0,
+  }}
+>
+  {HERO_DOCTOR.name}
+</Typography>
 
-          <Typography
-            className="hero-title"
-            sx={{
-              fontSize: { xs: '1rem', md: '1.15rem' },
-              color: 'rgba(255,255,255,0.8)',
-              fontWeight: 500,
-              mb: 0.5,
-              opacity: 0,
-            }}
-          >
-            {HERO_DOCTOR.title}
-          </Typography>
+{/* Subtitle — qualifications */}
+<Typography
+  sx={{
+    fontSize: '0.85rem',
+    fontWeight: 400,
+    color: 'rgba(144,224,239,0.85)',
+    letterSpacing: '0.04em',
+    mb: 1,
+    textAlign:'right',
+    mr:"30px"
+  }}
+>
+  {HERO_DOCTOR.subtitle}
+</Typography>
 
-          <Typography
-            sx={{
-              fontSize: '0.82rem',
-              color: 'rgba(144,224,239,0.85)',
-              fontWeight: 400,
-              mb: 2.5,
-              letterSpacing: '0.02em',
-            }}
-          >
-            {HERO_DOCTOR.subtitle}
-          </Typography>
+{/* Title — role */}
+{/* <Typography
+  className="hero-title"
+  sx={{
+    fontSize: '0.95rem',
+    fontWeight: 500,
+    color: 'rgba(255,255,255,0.7)',
+    textTransform: 'capitalize',
+    letterSpacing: '0.01em',
+    mb: 2.5,
+    opacity: 0,
+  }}
+>
+  {HERO_DOCTOR.title}
+</Typography> */}
 
-          <Typography
-            className="hero-desc"
-            sx={{
-              fontSize: { xs: '0.95rem', md: '1.05rem' },
-              color: 'rgba(255,255,255,0.75)',
-              lineHeight: 1.75,
-              maxWidth: 480,
-              mb: 4,
-              opacity: 0,
-            }}
-          >
-            {HERO_DOCTOR.description}
-          </Typography>
+{/* Divider accent */}
+<Box sx={{ width: 36, height: '2px', background: 'rgba(144,224,239,0.6)', borderRadius: '2px', mb: 2.5 }} />
 
-          <Box className="hero-cta" sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', opacity: 0 }}>
+{/* Description */}
+<Typography
+  className="hero-desc"
+  sx={{
+    fontSize: { xs: '0.95rem', md: '1.05rem' },
+    fontWeight: 400,
+    color: 'rgba(255,255,255,0.72)',
+    lineHeight: 1.75,
+    maxWidth: 480,
+    mb: 4,
+    opacity: 0,
+  }}
+>
+  {HERO_DOCTOR.description}
+</Typography>
+ <Box className="hero-cta" sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', opacity: 0 }}>
             <Button
               variant="contained"
               color="secondary"
