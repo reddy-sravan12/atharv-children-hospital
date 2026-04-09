@@ -20,10 +20,11 @@ const HERO_DOCTOR = {
 }
 
 const STATS = [
-  { value: '2,000+', label: 'Happy Patients' },
+  { value: '3,000+', label: 'Happy Patients' },
   { value: '1', label: 'Experienced Doctor' },
   { value: '3', label: 'Support Staff' },
   { value: 'In-house', label: 'Pharmacy Available' },
+  { value: 'In-house', label: 'Diagnostics Lab' },
 ]
 
 export default function Hero() {

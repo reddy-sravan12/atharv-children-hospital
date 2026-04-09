@@ -23,7 +23,7 @@ export default function MapSection() {
 
         const map = new maplibregl.Map({
           container: mapRef.current!,
-          style: 'https://demotiles.maplibre.org/style.json',
+          style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
           center: [HOSPITAL_INFO.coordinates.lng, HOSPITAL_INFO.coordinates.lat],
           zoom: 14,
           attributionControl: false,

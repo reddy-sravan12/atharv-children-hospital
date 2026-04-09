@@ -227,14 +227,14 @@
 
 @media (max-width: 600px) {
   .statsBar {
-    flex-wrap: wrap;
-    gap: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
     padding: 1.5rem 1rem;
-    justify-content: center;
+    justify-items: center;
   }
 
   .statItem {
-    flex: 1 1 45%;
     padding: 0.5rem;
   }
 

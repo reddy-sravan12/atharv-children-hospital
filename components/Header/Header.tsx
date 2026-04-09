@@ -111,23 +111,9 @@ export default function Header() {
                     transition: 'color 0.4s',
                   }}
                 >
-                  MedCare
+                  Atharva children's hospital
                 </Box>
-                <Box
-                  component="span"
-                  sx={{
-                    display: 'block',
-                    fontFamily: '"DM Sans", sans-serif',
-                    fontSize: '0.65rem',
-                    fontWeight: 500,
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    color: scrolled ? 'secondary.main' : 'rgba(255,255,255,0.8)',
-                    transition: 'color 0.4s',
-                  }}
-                >
-                  Hospital
-                </Box>
+                
               </Box>
             </Box>
 
