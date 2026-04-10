@@ -16,10 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="description" content="MedCare Hospital – Compassionate Care, Advanced Medicine. Book appointments with top specialists." />
+        <meta name="description" content="Atharva Children's Hospital – Compassionate Care, Advanced Medicine. Book appointments with top specialists." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-        <title>MedCare Hospital | Expert Healthcare</title>
+        <title>Atharva Children's Hospital | Expert Healthcare</title>
       </head>
       <body>
         <AppRouterCacheProvider>

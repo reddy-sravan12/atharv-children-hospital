@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Box, Typography, TextField, Button, Grid,
   MenuItem, InputAdornment, Stepper, Step,
@@ -11,15 +11,13 @@ import PhoneIcon from '@mui/icons-material/Phone'
 import EmailIcon from '@mui/icons-material/Email'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices'
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import AssignmentIcon from '@mui/icons-material/Assignment'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { generateAppointmentPDF, generateRegistrationId, AppointmentData } from '@/lib/generatePDF'
 import { buildWhatsAppMessage, openWhatsApp } from '@/lib/whatsapp'
-import { DOCTORS } from '@/data'
 import styles from './OPRegistration.module.css'
 
 interface OPFormData {
@@ -35,12 +33,25 @@ interface OPFormData {
   time: string
 }
 
+const PREFERRED_DOCTOR_VALUE = 'Dr. Challa Chaitanya — Pediatric Consultant'
+const DOCTOR_OPTIONS = [
+  {
+    id: 1,
+    name: 'Dr. Challa Chaitanya',
+    specialization: 'Pediatric Consultant',
+    value: PREFERRED_DOCTOR_VALUE,
+  },
+]
+
 const GENDER_OPTIONS = ['Male', 'Female', 'Other', 'Prefer not to say']
-const TIME_SLOTS = [
+const MON_SAT_TIME_SLOTS = [
+  '08:00 AM', '08:30 AM',
+  '04:00 PM', '04:30 PM',
+  '05:00 PM', '05:30 PM',
+]
+const SUN_TIME_SLOTS = [
   '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM',
-  '11:00 AM', '11:30 AM', '12:00 PM', '02:00 PM',
-  '02:30 PM', '03:00 PM', '03:30 PM', '04:00 PM',
-  '04:30 PM', '05:00 PM', '05:30 PM', '06:00 PM',
+  '11:00 AM', '11:30 AM',
 ]
 
 const STEPS = ['Personal Details', 'Appointment', 'Confirmation']
@@ -48,6 +59,7 @@ const STEPS = ['Personal Details', 'Appointment', 'Confirmation']
 export default function OPRegistration() {
   const [activeStep, setActiveStep] = useState(0)
   const [submitting, setSubmitting] = useState(false)
+  const [sendingConfirmation, setSendingConfirmation] = useState(false)
   const [confirmed, setConfirmed] = useState(false)
   const [appointmentData, setAppointmentData] = useState<AppointmentData | null>(null)
 
@@ -57,15 +69,33 @@ export default function OPRegistration() {
     control,
     trigger,
     getValues,
+    setValue,
     formState: { errors },
   } = useForm<OPFormData>({
-    defaultValues: { gender: '', doctor: '', time: '' },
+    defaultValues: { gender: '', doctor: PREFERRED_DOCTOR_VALUE, time: '' },
   })
+
+  const selectedDate = useWatch({ control, name: 'date' })
+  const timeSlots = getTimeSlotsForDate(selectedDate)
+
+  useEffect(() => {
+    const currentTime = getValues('time')
+    if (currentTime && !timeSlots.includes(currentTime)) {
+      setValue('time', '')
+    }
+  }, [selectedDate, setValue, getValues, timeSlots])
 
   const STEP_FIELDS: (keyof OPFormData)[][] = [
     ['fullName', 'age', 'gender', 'phone', 'email', 'address'],
     ['symptoms', 'doctor', 'date', 'time'],
   ]
+
+  function getTimeSlotsForDate(dateValue?: string) {
+    if (!dateValue) return MON_SAT_TIME_SLOTS
+    const selected = new Date(dateValue)
+    const day = selected.getDay()
+    return day === 0 ? SUN_TIME_SLOTS : MON_SAT_TIME_SLOTS
+  }
 
   const handleNext = async () => {
     const valid = await trigger(STEP_FIELDS[activeStep])
@@ -105,20 +135,20 @@ export default function OPRegistration() {
     toast.success('Appointment registered successfully!', { duration: 4000 })
   }
 
-  const handleDownloadPDF = async () => {
+  const handleWhatsApp = async () => {
     if (!appointmentData) return
+    setSendingConfirmation(true)
     try {
+      const message = buildWhatsAppMessage(appointmentData)
+      openWhatsApp(message)
       await generateAppointmentPDF(appointmentData)
-      toast.success('PDF downloaded successfully!')
+      toast.success('WhatsApp sent and confirmation slip downloaded.')
     } catch (err) {
-      toast.error('Failed to generate PDF. Please try again.')
+      console.error(err)
+      toast.error('Failed to send WhatsApp confirmation or download slip. Please try again.')
+    } finally {
+      setSendingConfirmation(false)
     }
-  }
-
-  const handleWhatsApp = () => {
-    if (!appointmentData) return
-    const message = buildWhatsAppMessage(appointmentData)
-    openWhatsApp(message)
   }
 
   const handleNewRegistration = () => {
@@ -332,8 +362,8 @@ export default function OPRegistration() {
                           helperText={errors.doctor?.message}
                           InputProps={{ startAdornment: <InputAdornment position="start"><MedicalServicesIcon sx={{ fontSize: 18, color: 'text.secondary' }} /></InputAdornment> }}
                         >
-                          {DOCTORS.map(d => (
-                            <MenuItem key={d.id} value={`${d.name} — ${d.specialization}`}>
+                          {DOCTOR_OPTIONS.map(d => (
+                            <MenuItem key={d.id} value={d.value}>
                               <Box>
                                 <Box sx={{ fontWeight: 600, fontSize: '0.9rem' }}>{d.name}</Box>
                                 <Box sx={{ fontSize: '0.78rem', color: 'text.secondary' }}>{d.specialization}</Box>
@@ -353,9 +383,12 @@ export default function OPRegistration() {
                       InputLabelProps={{ shrink: true }}
                       inputProps={{ min: minDate, max: maxDateStr }}
                       InputProps={{ startAdornment: <InputAdornment position="start"><CalendarMonthIcon sx={{ fontSize: 18, color: 'text.secondary' }} /></InputAdornment> }}
-                      {...register('date', { required: 'Date is required' })}
+                      {...register('date', {
+                        required: 'Date is required',
+                        validate: value => !!value || 'Date is required',
+                      })}
                       error={!!errors.date}
-                      helperText={errors.date?.message}
+                      helperText={errors.date?.message || 'OPD hours: Mon–Sat 8–9 AM, 4–6 PM; Sun 9 AM–12 PM'}
                     />
                   </Grid>
 
@@ -373,7 +406,7 @@ export default function OPRegistration() {
                           error={!!errors.time}
                           helperText={errors.time?.message}
                         >
-                          {TIME_SLOTS.map(slot => (
+                          {timeSlots.map(slot => (
                             <MenuItem key={slot} value={slot}>{slot}</MenuItem>
                           ))}
                         </TextField>
@@ -418,16 +451,16 @@ export default function OPRegistration() {
                   variant="h4"
                   sx={{ fontFamily: '"Playfair Display", serif', fontWeight: 700, color: 'var(--primary-dark)', mb: 0.5 }}
                 >
-                  Appointment Confirmed!
+                  Confirm via WhatsApp
                 </Typography>
                 <Typography sx={{ color: 'var(--gray-600)', mb: 3 }}>
-                  Your registration has been submitted successfully.
+                  Click the button below to send your OP registration to the hospital and download the confirmation slip automatically.
                 </Typography>
 
                 <Box className={styles.confirmSlip}>
                   <Box className={styles.slipHeader}>
                     <Typography sx={{ fontWeight: 700, color: 'var(--primary-dark)', fontSize: '1rem' }}>
-                      MedCare Hospital
+                      Atharva Children's Hospital
                     </Typography>
                     <Chip
                       label="CONFIRMED"
@@ -471,19 +504,11 @@ export default function OPRegistration() {
                 <Box className={styles.confirmActions}>
                   <Button
                     variant="contained"
-                    color="primary"
-                    size="large"
-                    startIcon={<PictureAsPdfIcon />}
-                    onClick={handleDownloadPDF}
-                    sx={{ flex: 1, minWidth: 180 }}
-                  >
-                    Download PDF Slip
-                  </Button>
-                  <Button
-                    variant="contained"
                     size="large"
                     startIcon={<WhatsAppIcon />}
                     onClick={handleWhatsApp}
+                    disabled={sendingConfirmation}
+                    endIcon={sendingConfirmation ? <CircularProgress size={18} color="inherit" /> : undefined}
                     sx={{
                       flex: 1,
                       minWidth: 180,
@@ -491,7 +516,7 @@ export default function OPRegistration() {
                       '&:hover': { background: '#1DA851', transform: 'translateY(-2px)' },
                     }}
                   >
-                    Send via WhatsApp
+                    {sendingConfirmation ? 'Sending…' : 'Send WhatsApp & Download Slip'}
                   </Button>
                 </Box>
 
