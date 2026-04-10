@@ -4,9 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { Box, Typography } from '@mui/material'
 import Lottie from 'lottie-react'
 
-// --- PLACEHOLDERS ---
-// Replace these strings with your actual Lottie JSON objects or local paths
-import kids from '../../lib/lottie-json/kids.json' 
+import kids from '../../lib/lottie-json/kids.json'
 import cuteTiger from '../../lib/lottie-json/cuteTiger.json'
 import spaceTurtle from '../../lib/lottie-json/spaceTurtle.json'
 import childrenLetters from '../../lib/lottie-json/childrenHoldingLetters.json'
@@ -21,32 +19,44 @@ interface Disease {
 }
 
 const INITIAL_DISEASES: Disease[] = [
-  { id: 'fever',      label: 'Fever',          angle: 270, status: 'sick' },
-  { id: 'cough',      label: 'Cough',          angle: 330, status: 'sick' },
-  { id: 'nausea',     label: 'Nausea',         angle: 30,  status: 'sick' },
-  { id: 'Other diseases', label: 'Other Diseases', angle: 90, status: 'sick' },
-  { id: 'indigestion',label: 'Indigestion',    angle: 150, status: 'sick' },
-  { id: 'cold',       label: 'Common Cold',    angle: 210, status: 'sick' },
+  { id: 'fever',          label: 'Fever',          angle: 270, status: 'sick' },
+  { id: 'cough',          label: 'Cough',          angle: 330, status: 'sick' },
+  { id: 'nausea',         label: 'Nausea',         angle: 30,  status: 'sick' },
+  { id: 'Other diseases', label: 'Other Diseases', angle: 90,  status: 'sick' },
+  { id: 'indigestion',    label: 'Indigestion',    angle: 150, status: 'sick' },
+  { id: 'cold',           label: 'Common Cold',    angle: 210, status: 'sick' },
 ]
 
-// --- CONSTANTS ---
-const RADIUS = 240 // Increased radius to accommodate bigger nodes
 const toRad = (deg: number) => (deg * Math.PI) / 180
 
 export default function HealingFlowDiagram() {
   const canvasRef = useRef<HTMLDivElement>(null)
-  const pulseRef = useRef<HTMLDivElement>(null)
-  const animRef = useRef<number | null>(null)
-  const stopRef = useRef(false)
+  const pulseRef  = useRef<HTMLDivElement>(null)
+  const animRef   = useRef<number | null>(null)
+  const stopRef   = useRef(false)
 
-  const [ready, setReady] = useState(false)
-  const [inView, setInView] = useState(false)
+  const [ready,    setReady]    = useState(false)
+  const [inView,   setInView]   = useState(false)
   const [diseases, setDiseases] = useState<Disease[]>(INITIAL_DISEASES)
-  const [healing, setHealing] = useState(false)
-  const [status, setStatus] = useState('')
-  const [size, setSize] = useState({ w: 800, h: 700 })
+  const [healing,  setHealing]  = useState(false)
+  const [status,   setStatus]   = useState('')
+  const [size,     setSize]     = useState({ w: 800, h: 700 })
 
-  // 1. Intersection Observer to trigger animation when visible
+  // Derive radius + canvas height from container width so mobile scales naturally
+  const isMobile = size.w < 500
+  const isTablet = size.w >= 500 && size.w < 800
+  const RADIUS      = isMobile ? 120 : isTablet ? 175 : 240
+  const canvasHeight = isMobile ? 440 : isTablet ? 560 : 700
+
+  const cx = size.w / 2
+  const cy = canvasHeight / 2
+
+  const nodePos = (angle: number) => ({
+    x: cx + RADIUS * Math.cos(toRad(angle)),
+    y: cy + RADIUS * Math.sin(toRad(angle)),
+  })
+
+  // Intersection Observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setInView(true) },
@@ -56,7 +66,7 @@ export default function HealingFlowDiagram() {
     return () => observer.disconnect()
   }, [])
 
-  // 2. Resize Observer to handle responsive canvas dimensions
+  // Resize Observer
   useEffect(() => {
     const obs = new ResizeObserver(entries => {
       const { width, height } = entries[0].contentRect
@@ -67,15 +77,7 @@ export default function HealingFlowDiagram() {
     return () => obs.disconnect()
   }, [])
 
-  const cx = size.w / 2
-  const cy = size.h / 2
-
-  const nodePos = (angle: number) => ({
-    x: cx + RADIUS * Math.cos(toRad(angle)),
-    y: cy + RADIUS * Math.sin(toRad(angle)),
-  })
-
-  // 3. Pulse Animation Logic
+  // Pulse animation
   const animatePulse = useCallback(
     (toX: number, toY: number, duration: number): Promise<void> => {
       return new Promise(resolve => {
@@ -84,11 +86,11 @@ export default function HealingFlowDiagram() {
         const start = performance.now()
 
         const step = (now: number) => {
-          const t = Math.min((now - start) / duration, 1)
+          const t    = Math.min((now - start) / duration, 1)
           const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t
-          
-          pulse.style.left = (cx + (toX - cx) * ease) + 'px'
-          pulse.style.top = (cy + (toY - cy) * ease) + 'px'
+
+          pulse.style.left = cx + (toX - cx) * ease + 'px'
+          pulse.style.top  = cy + (toY - cy) * ease + 'px'
 
           if (t < 1 && !stopRef.current) {
             animRef.current = requestAnimationFrame(step)
@@ -103,7 +105,7 @@ export default function HealingFlowDiagram() {
     [cx, cy]
   )
 
-  // 4. Main Healing Loop
+  // Healing loop
   const startHealing = async () => {
     if (healing) return
     setHealing(true)
@@ -144,34 +146,59 @@ export default function HealingFlowDiagram() {
   }, [ready, inView])
 
   return (
-    <Box 
-      sx={{ 
-        p: 4, 
-        background: 'var(--color-background-secondary)', 
-        borderRadius: 8, 
+    <Box
+      sx={{
+        p: { xs: 2, sm: 3, md: 4 },
+        background: 'var(--color-background-secondary)',
+        borderRadius: 8,
         position: 'relative',
         overflow: 'hidden',
-        minHeight: 750 
+        minHeight: { xs: 500, sm: 620, md: 750 },
       }}
     >
-      {/* --- FLOATING LOTTIE DECORATIONS --- */}
-      <Box sx={{ position: 'absolute', top: 20, left: 20, width: 220, opacity: 0.5, pointerEvents: 'none' }}>
-        <Lottie animationData={spaceTurtle} loop={true} />
+      {/* Lottie decorations — hidden on mobile to avoid clutter */}
+      <Box sx={{
+        position: 'absolute', top: 20, left: 20,
+        width: { xs: 0, sm: 140, md: 220 },
+        opacity: 0.5, pointerEvents: 'none',
+        display: { xs: 'none', sm: 'block' },
+      }}>
+        <Lottie animationData={spaceTurtle} loop />
       </Box>
-      <Box sx={{ position: 'absolute', bottom: -50, right: -50, width: 350, opacity: 0.5, pointerEvents: 'none' }}>
-        <Lottie animationData={kids} loop={true} />
+      <Box sx={{
+        position: 'absolute', bottom: -50, right: -50,
+        width: { xs: 0, sm: 220, md: 350 },
+        opacity: 0.5, pointerEvents: 'none',
+        display: { xs: 'none', sm: 'block' },
+      }}>
+        <Lottie animationData={kids} loop />
+      </Box>
+      <Box sx={{
+        position: 'absolute', bottom: 20, left: 20,
+        width: { xs: 0, sm: 140, md: 220 },
+        opacity: 0.5, pointerEvents: 'none',
+        display: { xs: 'none', sm: 'block' },
+      }}>
+        <Lottie animationData={cuteTiger} loop />
+      </Box>
+      <Box sx={{
+        position: 'absolute', top: -10, right: -30,
+        width: { xs: 0, sm: 220, md: 350 },
+        opacity: 0.5, pointerEvents: 'none',
+        display: { xs: 'none', sm: 'block' },
+      }}>
+        <Lottie animationData={childrenLetters} loop />
       </Box>
 
-      <Box sx={{ position: 'absolute', bottom: 20, left: 20, width: 220, opacity: 0.5, pointerEvents: 'none' }}>
-        <Lottie animationData={cuteTiger} loop={true} />
-      </Box>
-      <Box sx={{ position: 'absolute', top: -10, right: -30, width: 350, opacity: 0.5, pointerEvents: 'none' }}>
-        <Lottie animationData={childrenLetters} loop={true} />
-      </Box>
-
-      {/* --- CANVAS --- */}
-      <Box ref={canvasRef} sx={{ position: 'relative', width: '100%', height: 700 }}>
-        
+      {/* Canvas */}
+      <Box
+        ref={canvasRef}
+        sx={{
+          position: 'relative',
+          width: '100%',
+          height: canvasHeight,
+        }}
+      >
         {/* SVG Lines */}
         <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 1 }}>
           {diseases.map(d => {
@@ -181,7 +208,7 @@ export default function HealingFlowDiagram() {
                 key={d.id}
                 x1={cx} y1={cy} x2={x} y2={y}
                 stroke={d.status === 'cured' ? '#4ade80' : '#cbd5e0'}
-                strokeWidth={3}
+                strokeWidth={isMobile ? 2 : 3}
                 strokeDasharray="8 5"
                 style={{ transition: 'stroke 0.5s' }}
               />
@@ -189,12 +216,13 @@ export default function HealingFlowDiagram() {
           })}
         </svg>
 
-        {/* Pulse Dot */}
+        {/* Pulse dot */}
         <Box
           ref={pulseRef}
           sx={{
             position: 'absolute',
-            width: 22, height: 22,
+            width:  { xs: 14, sm: 18, md: 22 },
+            height: { xs: 14, sm: 18, md: 22 },
             borderRadius: '50%',
             background: '#22c55e',
             opacity: 0,
@@ -204,7 +232,7 @@ export default function HealingFlowDiagram() {
           }}
         />
 
-        {/* Doctor Center Node (BIGGER) */}
+        {/* Doctor node */}
         <Box
           sx={{
             position: 'absolute',
@@ -216,16 +244,14 @@ export default function HealingFlowDiagram() {
         >
           <Box
             sx={{
-              width: 140, height: 140, // Enlarged
+              width:  { xs: 80, sm: 110, md: 140 },
+              height: { xs: 80, sm: 110, md: 140 },
               borderRadius: '50%',
               background: '#fff',
-              border: '5px solid #3b82f6',
-              p: 0.5,
-              boxShadow: '0 12px 30px rgba(59, 130, 246, 0.3)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              border: { xs: '3px solid #3b82f6', md: '5px solid #3b82f6' },
+              boxShadow: '0 12px 30px rgba(59,130,246,0.3)',
               overflow: 'hidden',
+              mx: 'auto',
             }}
           >
             <Box
@@ -235,15 +261,29 @@ export default function HealingFlowDiagram() {
               sx={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
             />
           </Box>
-          <Typography sx={{ mt: 1.5, fontSize: '15px', fontWeight: 800, color: '#1e3a8a', textTransform: 'uppercase' }}>
+          <Typography
+            sx={{
+              mt: { xs: 0.8, md: 1.5 },
+              fontSize: { xs: '11px', sm: '13px', md: '15px' },
+              fontWeight: 800,
+              color: '#1e3a8a',
+              textTransform: 'uppercase',
+            }}
+          >
             Dr. Chaitanya
           </Typography>
-          <Typography sx={{ fontSize: '13px', color: '#60a5fa', fontWeight: 600 }}>
+          <Typography
+            sx={{
+              fontSize: { xs: '10px', sm: '12px', md: '13px' },
+              color: '#60a5fa',
+              fontWeight: 600,
+            }}
+          >
             Pediatrician Specialist
           </Typography>
         </Box>
 
-        {/* Disease Nodes (BIGGER) */}
+        {/* Disease nodes */}
         {diseases.map(d => {
           const { x, y } = nodePos(d.angle)
           const cured = d.status === 'cured'
@@ -255,16 +295,20 @@ export default function HealingFlowDiagram() {
                 left: x, top: y,
                 transform: 'translate(-50%,-50%)',
                 zIndex: 4,
-                padding: '14px 28px', // Increased padding
-                borderRadius: '18px',
-                background: cured ? '#f0fff4' : '#fff',
-                border: cured ? '3px solid #22c55e' : '3px dashed #cbd5e0',
-                color: cured ? '#166534' : '#64748b',
-                fontSize: '16px', // Bigger text
+                padding:      { xs: '8px 12px',  sm: '11px 20px', md: '14px 28px' },
+                borderRadius: { xs: '12px',       sm: '14px',      md: '18px' },
+                fontSize:     { xs: '11px',       sm: '14px',      md: '16px' },
                 fontWeight: 700,
                 whiteSpace: 'nowrap',
-                transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                boxShadow: cured ? '0 8px 20px rgba(34, 197, 94, 0.2)' : '0 4px 10px rgba(0,0,0,0.05)',
+                background: cured ? '#f0fff4' : '#fff',
+                border: cured
+                  ? { xs: '2px solid #22c55e', md: '3px solid #22c55e' }
+                  : { xs: '2px dashed #cbd5e0', md: '3px dashed #cbd5e0' },
+                color: cured ? '#166534' : '#64748b',
+                transition: 'all 0.4s cubic-bezier(0.175,0.885,0.32,1.275)',
+                boxShadow: cured
+                  ? '0 8px 20px rgba(34,197,94,0.2)'
+                  : '0 4px 10px rgba(0,0,0,0.05)',
                 ...(cured && { animation: 'popIn 0.4s ease forwards' }),
               }}
             >
@@ -274,17 +318,24 @@ export default function HealingFlowDiagram() {
         })}
       </Box>
 
-      {/* Bottom Status Info */}
+      {/* Status text */}
       <Box sx={{ textAlign: 'center', mt: -2, zIndex: 10, position: 'relative' }}>
-        <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#94a3b8', letterSpacing: '0.1em' }}>
+        <Typography
+          sx={{
+            fontSize: { xs: '11px', sm: '13px', md: '14px' },
+            fontWeight: 600,
+            color: '#94a3b8',
+            letterSpacing: '0.1em',
+          }}
+        >
           {status.toUpperCase()}
         </Typography>
       </Box>
 
       <style>{`
         @keyframes popIn {
-          0% { transform: translate(-50%,-50%) scale(0.9); }
-          50% { transform: translate(-50%,-50%) scale(1.1); }
+          0%   { transform: translate(-50%,-50%) scale(0.9); }
+          50%  { transform: translate(-50%,-50%) scale(1.1); }
           100% { transform: translate(-50%,-50%) scale(1); }
         }
       `}</style>
