@@ -6,9 +6,9 @@ import {
   List, ListItem, ListItemButton, ListItemText, useScrollTrigger,
   Slide, alpha, useTheme, useMediaQuery,
 } from '@mui/material'
+import Image from 'next/image'
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital'
 import PhoneIcon from '@mui/icons-material/Phone'
 import styles from './Header.module.css'
 
@@ -89,13 +89,20 @@ export default function Header() {
             >
               <Box
                 sx={{
-                  width: 40, height: 40, borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #1A73C8 0%, #0B5394 100%)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: 40,
+                  height: 40,
+                  position: 'relative',
+                  borderRadius: '50%',
+                  overflow: 'hidden',
                   boxShadow: '0 4px 16px rgba(11,83,148,0.35)',
                 }}
               >
-                <LocalHospitalIcon sx={{ color: '#fff', fontSize: 22 }} />
+                <Image
+                  src="/atharva-logo-removebg-preview.png"
+                  alt="Atharva logo"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                />
               </Box>
               <Box>
                 <Box
@@ -113,7 +120,6 @@ export default function Header() {
                 >
                   Atharva children's hospital
                 </Box>
-                
               </Box>
             </Box>
 
@@ -205,12 +211,28 @@ export default function Header() {
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, mt: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <LocalHospitalIcon sx={{ color: 'primary.main', fontSize: 24 }} />
+            <Box
+              sx={{
+                width: 36,
+                height: 36,
+                position: 'relative',
+                borderRadius: '50%',
+                overflow: 'hidden',
+                backgroundColor: 'white',
+              }}
+            >
+              <Image
+                src="/atharva-logo-removebg-preview.png"
+                alt="Atharva logo"
+                fill
+                style={{ objectFit: 'cover' }}
+              />
+            </Box>
             <Box
               component="span"
               sx={{ fontFamily: '"Playfair Display", serif', fontWeight: 700, fontSize: '1.15rem', color: 'primary.dark' }}
             >
-              MedCare
+              Atharva
             </Box>
           </Box>
           <IconButton onClick={() => setDrawerOpen(false)} size="small">

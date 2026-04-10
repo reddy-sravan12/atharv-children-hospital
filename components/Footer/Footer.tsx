@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, Typography, Grid, IconButton, Divider } from '@mui/material'
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital'
+import Image from 'next/image'
 import FacebookIcon from '@mui/icons-material/Facebook'
 import TwitterIcon from '@mui/icons-material/Twitter'
 import InstagramIcon from '@mui/icons-material/Instagram'
@@ -52,8 +52,23 @@ export default function Footer() {
           {/* Brand */}
           <Grid item xs={12} md={4}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-              <Box className={styles.logoIcon}>
-                <LocalHospitalIcon sx={{ color: '#fff', fontSize: 22 }} />
+              <Box
+                sx={{
+                  position: 'relative',
+                  width: 44,
+                  height: 44,
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
+                  flexShrink: 0,
+                }}
+              >
+                <Image
+                  src="/atharva-logo-removebg-preview.png"
+                  alt="Atharva logo"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                />
               </Box>
               <Box>
                 <Typography
