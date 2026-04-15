@@ -22,10 +22,12 @@
 
 .scrollLeft {
   animation: scrollLeft 40s linear infinite;
+  will-change: transform;
 }
 
 .scrollRight {
   animation: scrollRight 40s linear infinite;
+  will-change: transform;
 }
 
 .carouselWrapper:hover .scrollLeft,

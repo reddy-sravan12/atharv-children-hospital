@@ -39,8 +39,8 @@ export default function Reviews() {
         </Box>
       </Box>
 
-      {/* Infinite carousel – Row 2: right */}
-      <Box className={styles.carouselWrapper} sx={{ mt: 2 }}>
+      {/* Infinite carousel – Row 2: right — hidden on mobile to halve animation workload */}
+      <Box className={styles.carouselWrapper} sx={{ mt: 2, display: { xs: 'none', sm: 'block' } }}>
         <Box className={`${styles.carouselTrack} ${styles.scrollRight}`} ref={track2Ref}>
           {[...DOUBLED].reverse().map((review, i) => (
             <ReviewCard key={`row2-${review.id}-${i}`} review={review} />

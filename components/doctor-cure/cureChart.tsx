@@ -2,14 +2,18 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { Box, Typography } from '@mui/material'
-import Lottie from 'lottie-react'
+import dynamic from 'next/dynamic'
 
-import kids from '../../lib/lottie-json/kids.json'
-import cuteTiger from '../../lib/lottie-json/cuteTiger.json'
-import spaceTurtle from '../../lib/lottie-json/spaceTurtle.json'
-import childrenLetters from '../../lib/lottie-json/childrenHoldingLetters.json'
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
 
 import { HERO_DOCTOR } from '../Hero/Hero'
+
+interface LottieAssets {
+  spaceTurtle: object
+  kids: object
+  cuteTiger: object
+  childrenLetters: object
+}
 
 interface Disease {
   id: string
@@ -35,12 +39,32 @@ export default function HealingFlowDiagram() {
   const animRef   = useRef<number | null>(null)
   const stopRef   = useRef(false)
 
-  const [ready,    setReady]    = useState(false)
-  const [inView,   setInView]   = useState(false)
-  const [diseases, setDiseases] = useState<Disease[]>(INITIAL_DISEASES)
-  const [healing,  setHealing]  = useState(false)
-  const [status,   setStatus]   = useState('')
-  const [size,     setSize]     = useState({ w: 800, h: 700 })
+  const [ready,       setReady]       = useState(false)
+  const [inView,      setInView]      = useState(false)
+  const [diseases,    setDiseases]    = useState<Disease[]>(INITIAL_DISEASES)
+  const [healing,     setHealing]     = useState(false)
+  const [status,      setStatus]      = useState('')
+  const [size,        setSize]        = useState({ w: 800, h: 700 })
+  const [lottieAssets, setLottieAssets] = useState<LottieAssets | null>(null)
+
+  // Load Lottie JSON only on non-mobile to avoid ~400KB download on phones
+  useEffect(() => {
+    if (window.innerWidth >= 500) {
+      Promise.all([
+        import('../../lib/lottie-json/spaceTurtle.json'),
+        import('../../lib/lottie-json/kids.json'),
+        import('../../lib/lottie-json/cuteTiger.json'),
+        import('../../lib/lottie-json/childrenHoldingLetters.json'),
+      ]).then(([turtle, kids, tiger, letters]) => {
+        setLottieAssets({
+          spaceTurtle: turtle.default,
+          kids: kids.default,
+          cuteTiger: tiger.default,
+          childrenLetters: letters.default,
+        })
+      })
+    }
+  }, [])
 
   // Derive radius + canvas height from container width so mobile scales naturally
   const isMobile = size.w < 500
@@ -156,39 +180,43 @@ export default function HealingFlowDiagram() {
         minHeight: { xs: 500, sm: 620, md: 750 },
       }}
     >
-      {/* Lottie decorations — hidden on mobile to avoid clutter */}
-      <Box sx={{
-        position: 'absolute', top: 20, left: 20,
-        width: { xs: 0, sm: 140, md: 220 },
-        opacity: 0.5, pointerEvents: 'none',
-        display: { xs: 'none', sm: 'block' },
-      }}>
-        <Lottie animationData={spaceTurtle} loop />
-      </Box>
-      <Box sx={{
-        position: 'absolute', bottom: -50, right: -50,
-        width: { xs: 0, sm: 220, md: 350 },
-        opacity: 0.5, pointerEvents: 'none',
-        display: { xs: 'none', sm: 'block' },
-      }}>
-        <Lottie animationData={kids} loop />
-      </Box>
-      <Box sx={{
-        position: 'absolute', bottom: 20, left: 20,
-        width: { xs: 0, sm: 140, md: 220 },
-        opacity: 0.5, pointerEvents: 'none',
-        display: { xs: 'none', sm: 'block' },
-      }}>
-        <Lottie animationData={cuteTiger} loop />
-      </Box>
-      <Box sx={{
-        position: 'absolute', top: -10, right: -30,
-        width: { xs: 0, sm: 220, md: 350 },
-        opacity: 0.5, pointerEvents: 'none',
-        display: { xs: 'none', sm: 'block' },
-      }}>
-        <Lottie animationData={childrenLetters} loop />
-      </Box>
+      {/* Lottie decorations — only rendered on tablet+ after assets are lazily loaded */}
+      {lottieAssets && (
+        <>
+          <Box sx={{
+            position: 'absolute', top: 20, left: 20,
+            width: { sm: 140, md: 220 },
+            opacity: 0.5, pointerEvents: 'none',
+            display: { xs: 'none', sm: 'block' },
+          }}>
+            <Lottie animationData={lottieAssets.spaceTurtle} loop />
+          </Box>
+          <Box sx={{
+            position: 'absolute', bottom: -50, right: -50,
+            width: { sm: 220, md: 350 },
+            opacity: 0.5, pointerEvents: 'none',
+            display: { xs: 'none', sm: 'block' },
+          }}>
+            <Lottie animationData={lottieAssets.kids} loop />
+          </Box>
+          <Box sx={{
+            position: 'absolute', bottom: 20, left: 20,
+            width: { sm: 140, md: 220 },
+            opacity: 0.5, pointerEvents: 'none',
+            display: { xs: 'none', sm: 'block' },
+          }}>
+            <Lottie animationData={lottieAssets.cuteTiger} loop />
+          </Box>
+          <Box sx={{
+            position: 'absolute', top: -10, right: -30,
+            width: { sm: 220, md: 350 },
+            opacity: 0.5, pointerEvents: 'none',
+            display: { xs: 'none', sm: 'block' },
+          }}>
+            <Lottie animationData={lottieAssets.childrenLetters} loop />
+          </Box>
+        </>
+      )}
 
       {/* Canvas */}
       <Box

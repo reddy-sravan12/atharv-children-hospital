@@ -1,45 +1,41 @@
-'use client'
-
 import type { Metadata } from 'next'
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter'
-import { ThemeProvider } from '@mui/material/styles'
-import CssBaseline from '@mui/material/CssBaseline'
-import { Toaster } from 'react-hot-toast'
-import theme from '@/lib/theme'
+import { DM_Sans, Playfair_Display } from 'next/font/google'
+import Providers from './Providers'
 import '../styles/globals.css'
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-body',
+  display: 'swap',
+})
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['500', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-heading',
+  display: 'swap',
+})
+
+export const metadata: Metadata = {
+  title: "Atharva Children's Hospital | Expert Healthcare",
+  description:
+    "Atharva Children's Hospital – Compassionate Care, Advanced Medicine. Book appointments with top specialists.",
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <meta name="description" content="Atharva Children's Hospital – Compassionate Care, Advanced Medicine. Book appointments with top specialists." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <title>Atharva Children's Hospital | Expert Healthcare</title>
       </head>
-      <body>
-        <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            {children}
-            <Toaster
-              position="top-right"
-              toastOptions={{
-                style: {
-                  fontFamily: 'var(--font-body)',
-                  borderRadius: '12px',
-                },
-              }}
-            />
-          </ThemeProvider>
-        </AppRouterCacheProvider>
+      <body className={`${dmSans.variable} ${playfair.variable}`}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

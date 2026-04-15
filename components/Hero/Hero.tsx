@@ -98,16 +98,19 @@ export default function Hero() {
             { opacity: 1, x: 0, scale: 1, duration: 1, ease: 'power3.out', delay: 0.6 }
           )
 
-          // Floating shapes continuous animation
-          gsap.to('.floating-shape-1', {
-            y: -20, rotation: 5, duration: 3.5, ease: 'sine.inOut', yoyo: true, repeat: -1,
-          })
-          gsap.to('.floating-shape-2', {
-            y: 15, rotation: -8, duration: 4, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 0.8,
-          })
-          gsap.to('.floating-shape-3', {
-            y: -12, x: 8, duration: 5, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 1.5,
-          })
+          // Floating shapes — skip on mobile and when user prefers reduced motion
+          const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          if (window.innerWidth >= 768 && !prefersReduced) {
+            gsap.to('.floating-shape-1', {
+              y: -20, rotation: 5, duration: 3.5, ease: 'sine.inOut', yoyo: true, repeat: -1,
+            })
+            gsap.to('.floating-shape-2', {
+              y: 15, rotation: -8, duration: 4, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 0.8,
+            })
+            gsap.to('.floating-shape-3', {
+              y: -12, x: 8, duration: 5, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 1.5,
+            })
+          }
         }, heroRef)
       } catch (e) {
         console.warn('GSAP load failed', e)

@@ -73,9 +73,9 @@ export default function Header() {
           className={styles.appBar}
           sx={{
             background: scrolled
-              ? 'rgba(255,255,255,0.96)'
+              ? isMobile ? 'rgba(255,255,255,0.98)' : 'rgba(255,255,255,0.96)'
               : 'transparent',
-            backdropFilter: scrolled ? 'blur(20px)' : 'none',
+            backdropFilter: scrolled && !isMobile ? 'blur(20px)' : 'none',
             borderBottom: scrolled ? `1px solid rgba(11,83,148,0.1)` : 'none',
             transition: 'all 0.4s cubic-bezier(0.4,0,0.2,1)',
             boxShadow: scrolled ? '0 2px 24px rgba(11,83,148,0.08)' : 'none',
